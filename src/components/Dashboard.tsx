@@ -60,15 +60,21 @@ const Dashboard = () => {
           // Parse the JSON data safely
           const rawSections = data.dashboard_sections;
           
-          // Ensure the object has all required properties
-          const validSections: DashboardSections = {
-            bmi: typeof rawSections.bmi === 'boolean' ? rawSections.bmi : true,
-            progress: typeof rawSections.progress === 'boolean' ? rawSections.progress : true,
-            meals: typeof rawSections.meals === 'boolean' ? rawSections.meals : true,
-            fitness: typeof rawSections.fitness === 'boolean' ? rawSections.fitness : true
-          };
-          
-          setDashboardSections(validSections);
+          // Type guard to check if rawSections is an object
+          if (typeof rawSections === 'object' && rawSections !== null && !Array.isArray(rawSections)) {
+            // Now TypeScript knows rawSections is an object we can safely check properties
+            const jsonData = rawSections as Record<string, unknown>;
+            
+            // Create a valid sections object with type safety
+            const validSections: DashboardSections = {
+              bmi: typeof jsonData.bmi === 'boolean' ? jsonData.bmi : true,
+              progress: typeof jsonData.progress === 'boolean' ? jsonData.progress : true,
+              meals: typeof jsonData.meals === 'boolean' ? jsonData.meals : true,
+              fitness: typeof jsonData.fitness === 'boolean' ? jsonData.fitness : true
+            };
+            
+            setDashboardSections(validSections);
+          }
         }
       } catch (error) {
         console.error('Error loading dashboard preferences:', error);
