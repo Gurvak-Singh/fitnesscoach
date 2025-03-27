@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, Moon, Sun, User, Home, Info } from "lucide-react";
+import { Menu, Moon, Sun, User, Home, Info, UtensilsCrossed } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "@/components/ThemeProvider";
 import { 
   Sheet,
   SheetContent,
@@ -17,8 +18,8 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const location = useLocation();
+  const { theme, setTheme } = useTheme();
 
   // Check if we're on the landing page
   const isLandingPage = location.pathname === "/";
@@ -36,9 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   }, [scrolled]);
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark");
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
@@ -69,11 +68,15 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
             Dashboard
           </Link>
-          <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
-            Profile
+          <Link to="/meals" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+            <UtensilsCrossed className="w-4 h-4 mr-1" />
+            Meals
           </Link>
           <Link to="/fitness" className="text-sm font-medium hover:text-primary transition-colors">
             Fitness
+          </Link>
+          <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
+            Profile
           </Link>
         </div>
         
@@ -123,11 +126,15 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 <Link to="/dashboard" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Dashboard
                 </Link>
-                <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
-                  Profile
+                <Link to="/meals" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                  <UtensilsCrossed className="w-4 h-4 mr-2" />
+                  Meals
                 </Link>
                 <Link to="/fitness" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Fitness
+                </Link>
+                <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                  Profile
                 </Link>
               </div>
             </SheetContent>
