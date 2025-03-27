@@ -8,7 +8,7 @@ import MealPlan from "@/components/MealPlan";
 import WorkoutTracker from "@/components/WorkoutTracker";
 import ProgressGraph from "@/components/ProgressGraph";
 import { Button } from "@/components/ui/button";
-import { UtensilsCrossed, Dumbbell, Users } from "lucide-react";
+import { UtensilsCrossed, Dumbbell, Users, Heart, Award, Star } from "lucide-react";
 
 const Index = () => {
   // Apply staggered animation effect on page load
@@ -77,17 +77,26 @@ const Index = () => {
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <h3 className="font-medium mb-1">Wearable Sync</h3>
-                <p className="text-sm text-muted-foreground">Connect your fitness devices to track your progress automatically.</p>
+              <div className="bg-card rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center mb-2">
+                  <Heart className="w-4 h-4 mr-2 text-primary" />
+                  <h3 className="font-medium">Wearable Sync</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">Connect your fitness devices to automatically import heart rate, steps, and calories burned data.</p>
               </div>
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <h3 className="font-medium mb-1">Social Feed</h3>
-                <p className="text-sm text-muted-foreground">Share your achievements and join community challenges.</p>
+              <div className="bg-card rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center mb-2">
+                  <Award className="w-4 h-4 mr-2 text-primary" />
+                  <h3 className="font-medium">Social Feed</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">Share your achievements, favorite recipes, and join community challenges with like-minded fitness enthusiasts.</p>
               </div>
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <h3 className="font-medium mb-1">Expert Access</h3>
-                <p className="text-sm text-muted-foreground">Book consultations with nutritionists and trainers.</p>
+              <div className="bg-card rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center mb-2">
+                  <Star className="w-4 h-4 mr-2 text-primary" />
+                  <h3 className="font-medium">Expert Access</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">Book paid consultations with certified nutritionists and personal trainers for personalized guidance.</p>
               </div>
             </div>
           </div>
