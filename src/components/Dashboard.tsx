@@ -14,10 +14,17 @@ import { AuthContext } from "@/App";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardHeader from "./DashboardHeader";
 
+interface DashboardSections {
+  bmi: boolean;
+  progress: boolean;
+  meals: boolean;
+  fitness: boolean;
+}
+
 const Dashboard = () => {
   const isMobile = useIsMobile();
   const { session } = useContext(AuthContext);
-  const [dashboardSections, setDashboardSections] = useState({
+  const [dashboardSections, setDashboardSections] = useState<DashboardSections>({
     bmi: true,
     progress: true,
     meals: true,
@@ -50,7 +57,18 @@ const Dashboard = () => {
         }
         
         if (data && data.dashboard_sections) {
-          setDashboardSections(data.dashboard_sections);
+          // Cast the data to the correct type and validate structure
+          const sections = data.dashboard_sections as DashboardSections;
+          
+          // Ensure the object has all required properties
+          const validSections: DashboardSections = {
+            bmi: typeof sections.bmi === 'boolean' ? sections.bmi : true,
+            progress: typeof sections.progress === 'boolean' ? sections.progress : true,
+            meals: typeof sections.meals === 'boolean' ? sections.meals : true,
+            fitness: typeof sections.fitness === 'boolean' ? sections.fitness : true
+          };
+          
+          setDashboardSections(validSections);
         }
       } catch (error) {
         console.error('Error loading dashboard preferences:', error);

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { 
   Sheet, 
@@ -14,17 +15,19 @@ import { ArrowLeftRight, UtensilsCrossed, Dumbbell, BarChart, LineChart } from "
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+interface DashboardSections {
+  bmi: boolean;
+  progress: boolean;
+  meals: boolean;
+  fitness: boolean;
+}
+
 interface DashboardSectionCustomizerProps {
   open: boolean;
   onClose: () => void;
-  sections: {
-    bmi: boolean;
-    progress: boolean;
-    meals: boolean;
-    fitness: boolean;
-  };
+  sections: DashboardSections;
   userId: string;
-  onSave: (sections: any) => void;
+  onSave: (sections: DashboardSections) => void;
 }
 
 const DashboardSectionCustomizer: React.FC<DashboardSectionCustomizerProps> = ({
@@ -34,10 +37,10 @@ const DashboardSectionCustomizer: React.FC<DashboardSectionCustomizerProps> = ({
   userId,
   onSave
 }) => {
-  const [selectedSections, setSelectedSections] = useState(sections);
+  const [selectedSections, setSelectedSections] = useState<DashboardSections>(sections);
   const { toast } = useToast();
 
-  const handleToggle = (section: keyof typeof sections) => {
+  const handleToggle = (section: keyof DashboardSections) => {
     setSelectedSections(prev => ({
       ...prev,
       [section]: !prev[section]

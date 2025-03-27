@@ -4,15 +4,17 @@ import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import DashboardSectionCustomizer from './DashboardSectionCustomizer';
 
+interface DashboardSections {
+  bmi: boolean;
+  progress: boolean;
+  meals: boolean;
+  fitness: boolean;
+}
+
 interface DashboardHeaderProps {
   userId: string;
-  sections: {
-    bmi: boolean;
-    progress: boolean;
-    meals: boolean;
-    fitness: boolean;
-  };
-  onSectionsChange: (sections: any) => void;
+  sections: DashboardSections;
+  onSectionsChange: (sections: DashboardSections) => void;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
