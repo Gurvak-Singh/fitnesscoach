@@ -1,9 +1,12 @@
 
-import React, { useState, useEffect } from "react";
-import { Menu, Moon, Sun, User, Home, Info, UtensilsCrossed, Users } from "lucide-react";
+import React, { useState, useEffect, useContext } from "react";
+import { Menu, Moon, Sun, User, Home, Info, UtensilsCrossed, Users, LogIn, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/components/ThemeProvider";
+import { AuthContext } from "@/App";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { 
   Sheet,
   SheetContent,
@@ -11,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 interface NavbarProps {
   className?: string;
@@ -20,6 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { session } = useContext(AuthContext);
 
   // Check if we're on the landing page
   const isLandingPage = location.pathname === "/";
@@ -38,6 +43,16 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success("Signed out successfully");
+    } catch (error) {
+      toast.error("Error signing out");
+    }
   };
 
   return (
@@ -65,23 +80,33 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             <Info className="w-4 h-4 mr-1" />
             About
           </Link>
-          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-            Dashboard
-          </Link>
-          <Link to="/meals" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
-            <UtensilsCrossed className="w-4 h-4 mr-1" />
-            Meals
-          </Link>
-          <Link to="/fitness" className="text-sm font-medium hover:text-primary transition-colors">
-            Fitness
-          </Link>
-          <Link to="/community" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
-            <Users className="w-4 h-4 mr-1" />
-            Community
-          </Link>
-          <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
-            Profile
-          </Link>
+          
+          {session ? (
+            <>
+              <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+                Dashboard
+              </Link>
+              <Link to="/meals" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+                <UtensilsCrossed className="w-4 h-4 mr-1" />
+                Meals
+              </Link>
+              <Link to="/fitness" className="text-sm font-medium hover:text-primary transition-colors">
+                Fitness
+              </Link>
+              <Link to="/community" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+                <Users className="w-4 h-4 mr-1" />
+                Community
+              </Link>
+              <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
+                Profile
+              </Link>
+            </>
+          ) : (
+            <Link to="/auth" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+              <LogIn className="w-4 h-4 mr-1" />
+              Sign In
+            </Link>
+          )}
         </div>
         
         <div className="flex items-center space-x-4">
@@ -97,13 +122,34 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             )}
           </button>
           
-          <Link 
-            to="/profile"
-            className="p-2 rounded-full hover:bg-secondary transition-colors"
-            aria-label="User profile"
-          >
-            <User className="w-5 h-5" />
-          </Link>
+          {session ? (
+            <div className="flex items-center space-x-2">
+              <Link 
+                to="/profile"
+                className="p-2 rounded-full hover:bg-secondary transition-colors"
+                aria-label="User profile"
+              >
+                <User className="w-5 h-5" />
+              </Link>
+              
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleSignOut}
+                className="hidden md:flex"
+              >
+                <LogOut className="w-5 h-5" />
+              </Button>
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className="hidden md:flex p-2 rounded-full hover:bg-secondary transition-colors"
+              aria-label="Sign in"
+            >
+              <LogIn className="w-5 h-5" />
+            </Link>
+          )}
           
           <Sheet>
             <SheetTrigger asChild>
@@ -127,23 +173,41 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                   <Info className="w-4 h-4 mr-2" />
                   About
                 </Link>
-                <Link to="/dashboard" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
-                  Dashboard
-                </Link>
-                <Link to="/meals" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
-                  <UtensilsCrossed className="w-4 h-4 mr-2" />
-                  Meals
-                </Link>
-                <Link to="/fitness" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
-                  Fitness
-                </Link>
-                <Link to="/community" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
-                  <Users className="w-4 h-4 mr-2" />
-                  Community
-                </Link>
-                <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
-                  Profile
-                </Link>
+                
+                {session ? (
+                  <>
+                    <Link to="/dashboard" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                      Dashboard
+                    </Link>
+                    <Link to="/meals" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                      <UtensilsCrossed className="w-4 h-4 mr-2" />
+                      Meals
+                    </Link>
+                    <Link to="/fitness" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                      Fitness
+                    </Link>
+                    <Link to="/community" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                      <Users className="w-4 h-4 mr-2" />
+                      Community
+                    </Link>
+                    <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                      Profile
+                    </Link>
+                    <Button 
+                      variant="ghost" 
+                      className="justify-start px-4 py-2 h-auto font-normal"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/auth" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
+                  </Link>
+                )}
               </div>
             </SheetContent>
           </Sheet>

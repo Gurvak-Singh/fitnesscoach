@@ -9,7 +9,78 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          age: number | null
+          allergies: string[] | null
+          cooking_skill: string | null
+          cooking_time: string | null
+          created_at: string
+          cuisine_preferences: string[] | null
+          daily_activity: string | null
+          diet_type: string | null
+          disliked_ingredients: string[] | null
+          exercise_frequency: string | null
+          fitness_goal: string | null
+          gender: string | null
+          height: number | null
+          id: string
+          meal_prep_preference: string | null
+          name: string | null
+          sleep_hours: string | null
+          target_weight: number | null
+          updated_at: string
+          weekly_goal: string | null
+          weight: number | null
+        }
+        Insert: {
+          age?: number | null
+          allergies?: string[] | null
+          cooking_skill?: string | null
+          cooking_time?: string | null
+          created_at?: string
+          cuisine_preferences?: string[] | null
+          daily_activity?: string | null
+          diet_type?: string | null
+          disliked_ingredients?: string[] | null
+          exercise_frequency?: string | null
+          fitness_goal?: string | null
+          gender?: string | null
+          height?: number | null
+          id: string
+          meal_prep_preference?: string | null
+          name?: string | null
+          sleep_hours?: string | null
+          target_weight?: number | null
+          updated_at?: string
+          weekly_goal?: string | null
+          weight?: number | null
+        }
+        Update: {
+          age?: number | null
+          allergies?: string[] | null
+          cooking_skill?: string | null
+          cooking_time?: string | null
+          created_at?: string
+          cuisine_preferences?: string[] | null
+          daily_activity?: string | null
+          diet_type?: string | null
+          disliked_ingredients?: string[] | null
+          exercise_frequency?: string | null
+          fitness_goal?: string | null
+          gender?: string | null
+          height?: number | null
+          id?: string
+          meal_prep_preference?: string | null
+          name?: string | null
+          sleep_hours?: string | null
+          target_weight?: number | null
+          updated_at?: string
+          weekly_goal?: string | null
+          weight?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

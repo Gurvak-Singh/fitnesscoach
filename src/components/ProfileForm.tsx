@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import PersonalSection from "@/components/profile/PersonalSection";
@@ -10,6 +10,7 @@ import CookingSection from "@/components/profile/CookingSection";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Save } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProfileFormProps {
   isOnboarding: boolean;
@@ -23,6 +24,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   onComplete
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  
   const form = useForm({
     defaultValues: {
       // Personal
@@ -54,6 +58,60 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       cookingSkill: "beginner"
     },
   });
+  
+  // Fetch user profile on component mount
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) return;
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+          
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
+        
+        if (data) {
+          setUserProfile(data);
+          
+          // Update form values with profile data
+          const updatedValues = {
+            name: data.name || "",
+            age: data.age || "",
+            gender: data.gender || "",
+            weight: data.weight || "",
+            height: data.height || "",
+            fitnessGoal: data.fitness_goal || "weight-loss",
+            targetWeight: data.target_weight || "",
+            weeklyGoal: data.weekly_goal || "0.5",
+            dailyActivity: data.daily_activity || "sedentary",
+            exerciseFrequency: data.exercise_frequency || "1-2",
+            sleepHours: data.sleep_hours || "7-8",
+            dietType: data.diet_type || "no-restriction",
+            cuisinePreferences: data.cuisine_preferences || [],
+            allergies: data.allergies || [],
+            dislikedIngredients: data.disliked_ingredients || [],
+            cookingTime: data.cooking_time || "any",
+            mealPrepPreference: data.meal_prep_preference || "daily",
+            cookingSkill: data.cooking_skill || "beginner"
+          };
+          
+          form.reset(updatedValues);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        toast.error('Could not fetch your profile');
+      }
+    };
+    
+    getProfile();
+  }, [form]);
 
   // Reorder sections to have personal info first, then activity, then goals, then dietary/cooking
   const sections = [
@@ -78,13 +136,58 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     }
   };
 
-  const onSaveProfile = () => {
-    // Here you would save the profile data to your backend or local storage
-    console.log(form.getValues());
-    toast.success("Profile saved successfully!");
-    
-    if (isOnboarding && onComplete) {
-      onComplete();
+  const onSaveProfile = async () => {
+    setLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error("You must be logged in to save your profile");
+        return;
+      }
+      
+      const formValues = form.getValues();
+      
+      // Map form values to database columns
+      const profileData = {
+        id: session.user.id,
+        name: formValues.name,
+        age: formValues.age,
+        gender: formValues.gender,
+        height: formValues.height,
+        weight: formValues.weight,
+        fitness_goal: formValues.fitnessGoal,
+        target_weight: formValues.targetWeight,
+        weekly_goal: formValues.weeklyGoal,
+        daily_activity: formValues.dailyActivity,
+        exercise_frequency: formValues.exerciseFrequency,
+        sleep_hours: formValues.sleepHours,
+        diet_type: formValues.dietType,
+        cuisine_preferences: formValues.cuisinePreferences,
+        allergies: formValues.allergies,
+        disliked_ingredients: formValues.dislikedIngredients,
+        cooking_time: formValues.cookingTime,
+        meal_prep_preference: formValues.mealPrepPreference,
+        cooking_skill: formValues.cookingSkill,
+        updated_at: new Date()
+      };
+      
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(profileData, { onConflict: 'id' });
+        
+      if (error) throw error;
+      
+      toast.success("Profile saved successfully!");
+      
+      if (isOnboarding && onComplete) {
+        onComplete();
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      toast.error("Failed to save profile");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,9 +203,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             <Button 
               type="submit" 
               className="w-full mt-6"
+              disabled={loading}
             >
               <Save className="mr-2 h-4 w-4" />
-              Save {sectionToRender.label}
+              {loading ? "Saving..." : `Save ${sectionToRender.label}`}
             </Button>
           </form>
         </Form>
@@ -153,6 +257,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               type="button" 
               onClick={handleNextStep}
               className={currentStep === 0 ? 'w-full' : 'flex-1'}
+              disabled={loading}
             >
               {currentStep < sections.length - 1 ? (
                 <>
@@ -162,7 +267,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Complete
+                  {loading ? "Saving..." : "Complete"}
                 </>
               )}
             </Button>

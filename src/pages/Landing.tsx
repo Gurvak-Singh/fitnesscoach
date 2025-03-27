@@ -1,140 +1,167 @@
-
-import React from "react";
+// Update the Landing.tsx file to include login buttons
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Target, Utensils, Dumbbell, LineChart, ShoppingCart, Video } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/App";
 
+const features = [
+  {
+    name: "Personalized Meal Plans",
+    description:
+      "Get custom meal plans tailored to your dietary preferences and fitness goals.",
+    icon: "/icons/meal-plan.svg",
+  },
+  {
+    name: "Custom Workout Routines",
+    description:
+      "Access workout routines designed to help you reach your specific fitness objectives.",
+    icon: "/icons/workout.svg",
+  },
+  {
+    name: "Progress Tracking",
+    description:
+      "Monitor your progress with detailed tracking of your meals, workouts, and achievements.",
+    icon: "/icons/progress.svg",
+  },
+  {
+    name: "Expert Guidance",
+    description:
+      "Receive guidance and support from certified fitness experts to keep you motivated.",
+    icon: "/icons/expert-guidance.svg",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Sarah L.",
+    quote:
+      "FitLife has completely transformed my approach to fitness. The personalized meal plans and workout routines have made it so much easier to stay on track and see real results.",
+    image: "/images/testimonial-1.jpg",
+  },
+  {
+    name: "Michael T.",
+    quote:
+      "I've tried countless fitness apps, but FitLife is the first one that truly understands my needs. The progress tracking feature is incredibly motivating, and the expert guidance has been invaluable.",
+    image: "/images/testimonial-2.jpg",
+  },
+];
+
+const ctaSections = [
+  {
+    title: "Ready to Transform Your Life?",
+    description:
+      "Join FitLife today and start your journey towards a healthier, happier you.",
+  },
+];
+
+// Replace export default with a new component definition
 const Landing = () => {
+  const { session } = useContext(AuthContext);
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      {/* Header with theme switcher */}
-      <header className="container mx-auto px-4 py-4 flex justify-end">
-        <ThemeSwitcher variant="icon" />
-      </header>
-      
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 pt-8 pb-20 md:pt-16 md:pb-32">
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-4 inline-flex items-center rounded-full border px-3 py-1 text-sm">
-            <span className="mr-1 text-primary">New</span> Your personal fitness journey starts here
-          </div>
-          <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl">
-            <span className="text-primary">Fit</span>Life Coach
+      <Navbar />
+      <div className="container mx-auto pt-32 pb-20 px-4">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6">
+            Your Personal
+            <span className="text-primary"> Fitness Coach</span>
           </h1>
-          <p className="mb-8 max-w-2xl text-muted-foreground">
-            Your all-in-one fitness companion that creates personalized meal plans and workout routines
-            based on your unique goals, preferences, and lifestyle.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Achieve your fitness goals with personalized nutrition plans, workout routines, and progress tracking — all in one place.
           </p>
-          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-            <Button asChild size="lg" className="group">
-              <Link to="/onboarding">
-                Get Started <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link to="/about">Learn More</Link>
-            </Button>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            {session ? (
+              <Button asChild size="lg" className="px-8">
+                <Link to="/dashboard">
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild size="lg" className="px-8">
+                  <Link to="/auth">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link to="/about">Learn More</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="bg-secondary/30 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-center text-3xl font-bold">How FitLife Coach Helps You</h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Feature 1 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Target className="h-6 w-6 text-primary" />
+        
+        <section className="py-12">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Key Features
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center p-6 rounded-lg shadow-md bg-card"
+              >
+                <img
+                  src={feature.icon}
+                  alt={feature.name}
+                  className="w-12 h-12 mb-4"
+                />
+                <h3 className="text-lg font-semibold mb-2">{feature.name}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </div>
-              <h3 className="mb-2 text-xl font-semibold">Personalized Goals</h3>
-              <p className="text-muted-foreground">
-                Set your fitness goals and track your progress. Whether it's weight loss, muscle gain,
-                or maintaining a healthy lifestyle.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Utensils className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Custom Meal Plans</h3>
-              <p className="text-muted-foreground">
-                Get meal plans tailored to your dietary preferences, allergies, and fitness goals with
-                the right balance of nutrients.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Dumbbell className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Adaptive Workouts</h3>
-              <p className="text-muted-foreground">
-                Personalized workout routines based on your goals, available equipment, and fitness level that adapt as you progress.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <LineChart className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Progress Tracking</h3>
-              <p className="text-muted-foreground">
-                Track your workout history, record reps and weights, and sync with wearable devices to monitor your fitness journey.
-              </p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Video className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Video Demonstrations</h3>
-              <p className="text-muted-foreground">
-                Watch HD video clips demonstrating proper exercise form and technique to maximize results and prevent injuries.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="rounded-lg bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <ShoppingCart className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Grocery Lists</h3>
-              <p className="text-muted-foreground">
-                Automatically generated shopping lists based on your meal plans to make grocery shopping
-                effortless.
-              </p>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h2 className="mb-6 text-3xl font-bold">Ready to Start Your Fitness Journey?</h2>
-        <p className="mb-8 mx-auto max-w-2xl text-muted-foreground">
-          Create your personalized profile now and get custom meal plans and workout routines designed specifically for your goals.
-        </p>
-        <Button asChild size="lg" className="group">
-          <Link to="/onboarding">
-            Create Your Profile <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </Button>
-      </section>
+        <section className="py-12">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            What Our Users Say
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center p-6 rounded-lg shadow-md bg-card"
+              >
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-20 h-20 rounded-full mb-4"
+                />
+                <h3 className="text-lg font-semibold">{testimonial.name}</h3>
+                <p className="text-muted-foreground italic">
+                  "{testimonial.quote}"
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>FitLife Coach — Your personalized fitness journey</p>
-        </div>
-      </footer>
+        <section className="py-16">
+          {ctaSections.map((cta, index) => (
+            <div
+              key={index}
+              className="text-center bg-secondary/30 rounded-lg p-8"
+            >
+              <h2 className="text-3xl font-bold mb-4">{cta.title}</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+                {cta.description}
+              </p>
+              <Button asChild size="lg" className="px-8">
+                <Link to="/auth">
+                  Get Started Today
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          ))}
+        </section>
+      </div>
     </div>
   );
 };
