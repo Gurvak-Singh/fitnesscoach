@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProfileForm from "@/components/ProfileForm";
 import { toast } from "sonner";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -23,11 +24,14 @@ const Onboarding = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
       <div className="container mx-auto pt-8 pb-16 px-4">
-        <div className="flex items-center mb-6">
-          <Link to="/" className="mr-4">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <h1 className="text-2xl font-bold">Complete Your Profile</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Link to="/" className="mr-4">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <h1 className="text-2xl font-bold">Complete Your Profile</h1>
+          </div>
+          <ThemeSwitcher variant="icon" />
         </div>
 
         <div className="max-w-2xl mx-auto">

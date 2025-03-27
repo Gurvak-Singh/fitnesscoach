@@ -18,7 +18,22 @@ export function ThemeProvider({
   defaultTheme?: Theme;
 }) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) || defaultTheme
+    () => {
+      // Check localStorage first
+      const storedTheme = localStorage.getItem("theme") as Theme;
+      if (storedTheme) return storedTheme;
+      
+      // Then check system preference
+      if (typeof window !== "undefined") {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        return systemTheme;
+      }
+      
+      // Default fallback
+      return defaultTheme;
+    }
   );
 
   useEffect(() => {
@@ -27,6 +42,20 @@ export function ThemeProvider({
     root.classList.add(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  // Listen for system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => {
+      // Only change theme if user hasn't manually set a preference
+      if (!localStorage.getItem("theme")) {
+        setTheme(mediaQuery.matches ? "dark" : "light");
+      }
+    };
+    
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   const value = {
     theme,

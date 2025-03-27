@@ -3,12 +3,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Target, Utensils, Dumbbell, LineChart, ShoppingCart, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      {/* Header with theme switcher */}
+      <header className="container mx-auto px-4 py-4 flex justify-end">
+        <ThemeSwitcher variant="icon" />
+      </header>
+      
       {/* Hero Section */}
-      <section className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-32">
+      <section className="container mx-auto px-4 pt-8 pb-20 md:pt-16 md:pb-32">
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 inline-flex items-center rounded-full border px-3 py-1 text-sm">
             <span className="mr-1 text-primary">New</span> Your personal fitness journey starts here
