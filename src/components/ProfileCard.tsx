@@ -9,9 +9,16 @@ interface ProfileCardProps {
   className?: string;
 }
 
+interface ProfileData {
+  name: string;
+  fitness_goal: string;
+  streak: number;
+  progress: number;
+}
+
 const ProfileCard: React.FC<ProfileCardProps> = ({ className }) => {
   const { session } = useContext(AuthContext);
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<ProfileData>({
     name: "User",
     fitness_goal: "Weight Loss",
     streak: 0,

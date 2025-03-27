@@ -18,6 +18,28 @@ interface ProfileFormProps {
   onComplete?: () => void;
 }
 
+// Define form values interface to match our form structure
+interface ProfileFormValues {
+  name: string;
+  age: string;
+  gender: string;
+  weight: string;
+  height: string;
+  fitnessGoal: string;
+  targetWeight: string;
+  weeklyGoal: string;
+  dailyActivity: string;
+  exerciseFrequency: string;
+  sleepHours: string;
+  dietType: string;
+  cuisinePreferences: string[];
+  allergies: string[];
+  dislikedIngredients: string[];
+  cookingTime: string;
+  mealPrepPreference: string;
+  cookingSkill: string;
+}
+
 const ProfileForm: React.FC<ProfileFormProps> = ({ 
   isOnboarding, 
   section = "all",
@@ -27,7 +49,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   
-  const form = useForm({
+  const form = useForm<ProfileFormValues>({
     defaultValues: {
       // Personal
       name: "",
@@ -80,15 +102,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         if (data) {
           setUserProfile(data);
           
-          // Update form values with profile data
-          const updatedValues = {
+          // Convert numeric values to strings for the form
+          const updatedValues: ProfileFormValues = {
             name: data.name || "",
-            age: data.age || "",
+            age: data.age?.toString() || "",
             gender: data.gender || "",
-            weight: data.weight || "",
-            height: data.height || "",
+            weight: data.weight?.toString() || "",
+            height: data.height?.toString() || "",
             fitnessGoal: data.fitness_goal || "weight-loss",
-            targetWeight: data.target_weight || "",
+            targetWeight: data.target_weight?.toString() || "",
             weeklyGoal: data.weekly_goal || "0.5",
             dailyActivity: data.daily_activity || "sedentary",
             exerciseFrequency: data.exercise_frequency || "1-2",
@@ -148,16 +170,16 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       
       const formValues = form.getValues();
       
-      // Map form values to database columns
+      // Map form values to database columns and convert string values to correct types
       const profileData = {
         id: session.user.id,
         name: formValues.name,
-        age: formValues.age,
+        age: formValues.age ? parseInt(formValues.age) : null,
         gender: formValues.gender,
-        height: formValues.height,
-        weight: formValues.weight,
+        height: formValues.height ? parseFloat(formValues.height) : null,
+        weight: formValues.weight ? parseFloat(formValues.weight) : null,
         fitness_goal: formValues.fitnessGoal,
-        target_weight: formValues.targetWeight,
+        target_weight: formValues.targetWeight ? parseFloat(formValues.targetWeight) : null,
         weekly_goal: formValues.weeklyGoal,
         daily_activity: formValues.dailyActivity,
         exercise_frequency: formValues.exerciseFrequency,
@@ -169,7 +191,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         cooking_time: formValues.cookingTime,
         meal_prep_preference: formValues.mealPrepPreference,
         cooking_skill: formValues.cookingSkill,
-        updated_at: new Date()
+        updated_at: new Date().toISOString()
       };
       
       const { error } = await supabase
