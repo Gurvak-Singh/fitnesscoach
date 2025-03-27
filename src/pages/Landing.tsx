@@ -1,7 +1,7 @@
-// Update the Landing.tsx file to include login buttons
+
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Utensils, Dumbbell, LineChart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/App";
@@ -11,25 +11,25 @@ const features = [
     name: "Personalized Meal Plans",
     description:
       "Get custom meal plans tailored to your dietary preferences and fitness goals.",
-    icon: "/icons/meal-plan.svg",
+    icon: <Utensils className="h-10 w-10 text-primary" />,
   },
   {
     name: "Custom Workout Routines",
     description:
       "Access workout routines designed to help you reach your specific fitness objectives.",
-    icon: "/icons/workout.svg",
+    icon: <Dumbbell className="h-10 w-10 text-primary" />,
   },
   {
     name: "Progress Tracking",
     description:
       "Monitor your progress with detailed tracking of your meals, workouts, and achievements.",
-    icon: "/icons/progress.svg",
+    icon: <LineChart className="h-10 w-10 text-primary" />,
   },
   {
     name: "Expert Guidance",
     description:
       "Receive guidance and support from certified fitness experts to keep you motivated.",
-    icon: "/icons/expert-guidance.svg",
+    icon: <Users className="h-10 w-10 text-primary" />,
   },
 ];
 
@@ -38,13 +38,13 @@ const testimonials = [
     name: "Sarah L.",
     quote:
       "FitLife has completely transformed my approach to fitness. The personalized meal plans and workout routines have made it so much easier to stay on track and see real results.",
-    image: "/images/testimonial-1.jpg",
+    avatar: "SL",
   },
   {
     name: "Michael T.",
     quote:
       "I've tried countless fitness apps, but FitLife is the first one that truly understands my needs. The progress tracking feature is incredibly motivating, and the expert guidance has been invaluable.",
-    image: "/images/testimonial-2.jpg",
+    avatar: "MT",
   },
 ];
 
@@ -56,7 +56,6 @@ const ctaSections = [
   },
 ];
 
-// Replace export default with a new component definition
 const Landing = () => {
   const { session } = useContext(AuthContext);
   
@@ -106,11 +105,9 @@ const Landing = () => {
                 key={index}
                 className="flex flex-col items-center text-center p-6 rounded-lg shadow-md bg-card"
               >
-                <img
-                  src={feature.icon}
-                  alt={feature.name}
-                  className="w-12 h-12 mb-4"
-                />
+                <div className="mb-4">
+                  {feature.icon}
+                </div>
                 <h3 className="text-lg font-semibold mb-2">{feature.name}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </div>
@@ -128,11 +125,9 @@ const Landing = () => {
                 key={index}
                 className="flex flex-col items-center text-center p-6 rounded-lg shadow-md bg-card"
               >
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-20 h-20 rounded-full mb-4"
-                />
+                <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-white text-xl font-semibold mb-4">
+                  {testimonial.avatar}
+                </div>
                 <h3 className="text-lg font-semibold">{testimonial.name}</h3>
                 <p className="text-muted-foreground italic">
                   "{testimonial.quote}"
