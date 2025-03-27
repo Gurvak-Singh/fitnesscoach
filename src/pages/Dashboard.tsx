@@ -36,7 +36,7 @@ const Dashboard = () => {
         
         {/* Footer content */}
         <div className="mt-12 text-center text-sm text-muted-foreground">
-          <p>FitMeal Tracker — Your personalized fitness journey</p>
+          <p>FitLife Coach — Your personalized fitness journey</p>
         </div>
       </div>
     </div>

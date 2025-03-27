@@ -54,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-1">
           <span className="text-primary text-xl font-bold">Fit</span>
-          <span className="text-xl font-bold">Meal</span>
+          <span className="text-xl font-bold">Life</span>
         </Link>
         
         <div className="hidden md:flex items-center space-x-6">
@@ -71,6 +71,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           </Link>
           <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
             Profile
+          </Link>
+          <Link to="/fitness" className="text-sm font-medium hover:text-primary transition-colors">
+            Fitness
           </Link>
         </div>
         
@@ -122,6 +125,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 </Link>
                 <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Profile
+                </Link>
+                <Link to="/fitness" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                  Fitness
                 </Link>
               </div>
             </SheetContent>
