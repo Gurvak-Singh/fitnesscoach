@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Landing from "./pages/Landing";
 import About from "./pages/About";
 import Onboarding from "./pages/Onboarding";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./components/Dashboard";
 import Profile from "./pages/Profile";
 import Fitness from "./pages/Fitness";
 import Meals from "./pages/Meals";
@@ -28,6 +28,9 @@ export const AuthContext = React.createContext({
 });
 
 const queryClient = new QueryClient();
+
+// Get the base path from the environment or use a default
+const basePath = import.meta.env.BASE_URL || '/';
 
 const App = () => {
   const [session, setSession] = useState(null);
@@ -74,7 +77,7 @@ const App = () => {
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
+            <BrowserRouter basename={basePath}>
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/about" element={<About />} />
