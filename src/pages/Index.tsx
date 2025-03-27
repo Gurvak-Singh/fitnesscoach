@@ -1,11 +1,43 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import ProfileCard from "@/components/ProfileCard";
+import BMICalculator from "@/components/BMICalculator";
+import MealPlan from "@/components/MealPlan";
+import WorkoutTracker from "@/components/WorkoutTracker";
+import ProgressGraph from "@/components/ProgressGraph";
 
 const Index = () => {
+  // Apply staggered animation effect on page load
+  useEffect(() => {
+    const elements = document.querySelectorAll('.animate-fade-in');
+    elements.forEach((el, index) => {
+      (el as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+    });
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+      <Navbar />
+      
+      <div className="container mx-auto pt-24 pb-16 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* First row */}
+          <ProfileCard className="md:col-span-2" />
+          
+          {/* Second row */}
+          <BMICalculator />
+          <ProgressGraph />
+          
+          {/* Third row */}
+          <MealPlan />
+          <WorkoutTracker />
+        </div>
+        
+        {/* Footer content */}
+        <div className="mt-12 text-center text-sm text-muted-foreground">
+          <p>FitMeal Tracker — Your personalized fitness journey</p>
+        </div>
       </div>
     </div>
   );
