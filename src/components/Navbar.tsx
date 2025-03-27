@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, Moon, Sun, User } from "lucide-react";
+import { Menu, Moon, Sun, User, Home, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { 
   Sheet,
   SheetContent,
@@ -18,6 +18,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ className }) => {
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const location = useLocation();
+
+  // Check if we're on the landing page
+  const isLandingPage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
     <div
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4",
-        scrolled 
+        scrolled || !isLandingPage
           ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm" 
           : "bg-transparent",
         className
@@ -54,7 +58,15 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
         </Link>
         
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link to="/" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+            <Home className="w-4 h-4 mr-1" />
+            Home
+          </Link>
+          <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+            <Info className="w-4 h-4 mr-1" />
+            About
+          </Link>
+          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
             Dashboard
           </Link>
           <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
@@ -97,7 +109,15 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col space-y-4">
-                <Link to="/" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
+                <Link to="/" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                  <Home className="w-4 h-4 mr-2" />
+                  Home
+                </Link>
+                <Link to="/about" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                  <Info className="w-4 h-4 mr-2" />
+                  About
+                </Link>
+                <Link to="/dashboard" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Dashboard
                 </Link>
                 <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
