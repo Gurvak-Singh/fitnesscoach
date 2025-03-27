@@ -360,7 +360,7 @@ const CookingTutorials = () => {
                             variant="outline"
                             onClick={() => toggleSaved(tutorial.id)}
                           >
-                            <Bookmark className="mr-2 h-4 w-4" filled={tutorial.saved} />
+                            <Bookmark className="mr-2 h-4 w-4" fill={tutorial.saved ? "currentColor" : "none"} />
                             {tutorial.saved ? "Saved" : "Save for Later"}
                           </Button>
                           <Button 
@@ -404,7 +404,8 @@ const CookingTutorials = () => {
                       onClick={() => toggleSaved(tutorial.id)}
                     >
                       <Bookmark 
-                        className={`h-4 w-4 mr-1 ${tutorial.saved ? "fill-primary" : ""}`} 
+                        className="h-4 w-4 mr-1" 
+                        fill={tutorial.saved ? "currentColor" : "none"}
                       />
                       {tutorial.saved ? "Saved" : "Save"}
                     </Button>
