@@ -49,10 +49,18 @@ const DashboardSectionCustomizer: React.FC<DashboardSectionCustomizerProps> = ({
 
   const handleSave = async () => {
     try {
+      // Convert DashboardSections to Json compatible object
+      const dashboardSectionsJson = {
+        bmi: selectedSections.bmi,
+        progress: selectedSections.progress,
+        meals: selectedSections.meals,
+        fitness: selectedSections.fitness
+      };
+      
       const { error } = await supabase
         .from('profiles')
         .update({
-          dashboard_sections: selectedSections,
+          dashboard_sections: dashboardSectionsJson,
           updated_at: new Date().toISOString()
         })
         .eq('id', userId);

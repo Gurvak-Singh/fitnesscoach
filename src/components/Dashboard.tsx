@@ -57,15 +57,15 @@ const Dashboard = () => {
         }
         
         if (data && data.dashboard_sections) {
-          // Cast the data to the correct type and validate structure
-          const sections = data.dashboard_sections as DashboardSections;
+          // Parse the JSON data safely
+          const rawSections = data.dashboard_sections;
           
           // Ensure the object has all required properties
           const validSections: DashboardSections = {
-            bmi: typeof sections.bmi === 'boolean' ? sections.bmi : true,
-            progress: typeof sections.progress === 'boolean' ? sections.progress : true,
-            meals: typeof sections.meals === 'boolean' ? sections.meals : true,
-            fitness: typeof sections.fitness === 'boolean' ? sections.fitness : true
+            bmi: typeof rawSections.bmi === 'boolean' ? rawSections.bmi : true,
+            progress: typeof rawSections.progress === 'boolean' ? rawSections.progress : true,
+            meals: typeof rawSections.meals === 'boolean' ? rawSections.meals : true,
+            fitness: typeof rawSections.fitness === 'boolean' ? rawSections.fitness : true
           };
           
           setDashboardSections(validSections);
