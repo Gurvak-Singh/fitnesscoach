@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useContext } from "react";
 import { Trophy, TrendingUp, Activity, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -40,7 +39,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ className }) => {
       try {
         const { data, error } = await supabase
           .from('profiles')
-          .select('*')
+          .select('name, fitness_goal, dashboard_preferences')
           .eq('id', session.user.id)
           .single();
 

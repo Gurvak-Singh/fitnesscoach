@@ -44,7 +44,7 @@ const Dashboard = () => {
           .eq('id', session.user.id)
           .single();
           
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Error loading dashboard preferences:', error);
           return;
         }

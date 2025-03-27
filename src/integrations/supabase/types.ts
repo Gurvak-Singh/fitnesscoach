@@ -18,6 +18,8 @@ export type Database = {
           created_at: string
           cuisine_preferences: string[] | null
           daily_activity: string | null
+          dashboard_preferences: string[] | null
+          dashboard_sections: Json | null
           diet_type: string | null
           disliked_ingredients: string[] | null
           exercise_frequency: string | null
@@ -41,6 +43,8 @@ export type Database = {
           created_at?: string
           cuisine_preferences?: string[] | null
           daily_activity?: string | null
+          dashboard_preferences?: string[] | null
+          dashboard_sections?: Json | null
           diet_type?: string | null
           disliked_ingredients?: string[] | null
           exercise_frequency?: string | null
@@ -64,6 +68,8 @@ export type Database = {
           created_at?: string
           cuisine_preferences?: string[] | null
           daily_activity?: string | null
+          dashboard_preferences?: string[] | null
+          dashboard_sections?: Json | null
           diet_type?: string | null
           disliked_ingredients?: string[] | null
           exercise_frequency?: string | null
