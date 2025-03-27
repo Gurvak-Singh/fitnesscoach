@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import GoalSection from "@/components/profile/GoalSection";
+import PersonalSection from "@/components/profile/PersonalSection";
 import ActivitySection from "@/components/profile/ActivitySection";
+import GoalSection from "@/components/profile/GoalSection";
 import DietarySection from "@/components/profile/DietarySection";
 import CookingSection from "@/components/profile/CookingSection";
 import { Button } from "@/components/ui/button";
@@ -54,9 +55,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     },
   });
 
+  // Reorder sections to have personal info first, then activity, then goals, then dietary/cooking
   const sections = [
-    { id: "goals", label: "Goals", component: <GoalSection form={form} /> },
+    { id: "personal", label: "Personal", component: <PersonalSection form={form} /> },
     { id: "activity", label: "Activity", component: <ActivitySection form={form} /> },
+    { id: "goals", label: "Goals", component: <GoalSection form={form} /> },
     { id: "dietary", label: "Dietary", component: <DietarySection form={form} /> },
     { id: "cooking", label: "Cooking", component: <CookingSection form={form} /> },
   ];

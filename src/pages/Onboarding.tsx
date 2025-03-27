@@ -34,9 +34,9 @@ const Onboarding = () => {
           <div className="bg-card/50 rounded-lg p-6 mb-6">
             <h2 className="text-lg font-medium mb-2">Why this information matters</h2>
             <p className="text-sm text-muted-foreground">
-              We use your profile details to create personalized meal plans and workout 
-              routines that are tailored specifically to your goals, preferences, and lifestyle.
-              This helps us provide recommendations that will work best for you.
+              We need to understand your current body metrics, daily activities, and sleep patterns 
+              to create personalized meal plans and workout routines. This information helps us 
+              tailor recommendations that will help you achieve your fitness goals efficiently.
             </p>
           </div>
           
