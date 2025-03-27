@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, Moon, Sun, User, Home, Info, UtensilsCrossed } from "lucide-react";
+import { Menu, Moon, Sun, User, Home, Info, UtensilsCrossed, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/components/ThemeProvider";
@@ -75,6 +75,10 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           <Link to="/fitness" className="text-sm font-medium hover:text-primary transition-colors">
             Fitness
           </Link>
+          <Link to="/community" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+            <Users className="w-4 h-4 mr-1" />
+            Community
+          </Link>
           <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
             Profile
           </Link>
@@ -132,6 +136,10 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 </Link>
                 <Link to="/fitness" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Fitness
+                </Link>
+                <Link to="/community" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors flex items-center">
+                  <Users className="w-4 h-4 mr-2" />
+                  Community
                 </Link>
                 <Link to="/profile" className="py-2 px-4 hover:bg-secondary rounded-md transition-colors">
                   Profile
