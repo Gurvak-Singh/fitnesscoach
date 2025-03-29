@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock meal data
 const mockMeals = {
@@ -72,6 +73,7 @@ const availableRecipes = [
 const MealPlanner = () => {
   const [mealPlan, setMealPlan] = useState(mockMeals);
   const [currentDay, setCurrentDay] = useState<keyof typeof mockMeals>("monday");
+  const isMobile = useIsMobile();
   
   const calculateDailyMacros = (day: keyof typeof mockMeals) => {
     return mealPlan[day].reduce(
@@ -101,83 +103,103 @@ const MealPlanner = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+        <CardHeader className="py-4 md:py-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <CardTitle className="flex items-center">
-                <Calendar className="mr-2 h-5 w-5" />
+              <CardTitle className="flex items-center text-lg md:text-xl">
+                <Calendar className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                 Weekly Meal Plan
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs md:text-sm mt-1">
                 Plan your meals for optimal nutrition
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
-              <p className="text-sm text-muted-foreground">Daily goal:</p>
-              <Badge variant="outline">1800-2200 calories</Badge>
-              <Badge variant="outline">120g protein</Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xs md:text-sm text-muted-foreground">Daily goal:</p>
+              <Badge variant="outline" className="text-xs">1800-2200 cal</Badge>
+              <Badge variant="outline" className="text-xs">120g protein</Badge>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <Tabs value={currentDay} onValueChange={(v) => setCurrentDay(v as keyof typeof mockMeals)}>
-            <TabsList className="grid grid-cols-7">
-              <TabsTrigger value="monday">Mon</TabsTrigger>
-              <TabsTrigger value="tuesday">Tue</TabsTrigger>
-              <TabsTrigger value="wednesday">Wed</TabsTrigger>
-              <TabsTrigger value="thursday">Thu</TabsTrigger>
-              <TabsTrigger value="friday">Fri</TabsTrigger>
-              <TabsTrigger value="saturday">Sat</TabsTrigger>
-              <TabsTrigger value="sunday">Sun</TabsTrigger>
+            <TabsList className={`grid ${isMobile ? 'grid-cols-4 gap-1 mb-2' : 'grid-cols-7'}`}>
+              {isMobile ? (
+                <>
+                  <TabsTrigger value="monday">Mon</TabsTrigger>
+                  <TabsTrigger value="tuesday">Tue</TabsTrigger>
+                  <TabsTrigger value="wednesday">Wed</TabsTrigger>
+                  <TabsTrigger value="thursday">Thu</TabsTrigger>
+                </>
+              ) : (
+                <>
+                  <TabsTrigger value="monday">Mon</TabsTrigger>
+                  <TabsTrigger value="tuesday">Tue</TabsTrigger>
+                  <TabsTrigger value="wednesday">Wed</TabsTrigger>
+                  <TabsTrigger value="thursday">Thu</TabsTrigger>
+                  <TabsTrigger value="friday">Fri</TabsTrigger>
+                  <TabsTrigger value="saturday">Sat</TabsTrigger>
+                  <TabsTrigger value="sunday">Sun</TabsTrigger>
+                </>
+              )}
             </TabsList>
+            
+            {isMobile && (
+              <TabsList className="grid grid-cols-3 gap-1 mb-4">
+                <TabsTrigger value="friday">Fri</TabsTrigger>
+                <TabsTrigger value="saturday">Sat</TabsTrigger>
+                <TabsTrigger value="sunday">Sun</TabsTrigger>
+              </TabsList>
+            )}
             
             {Object.keys(mealPlan).map((day) => (
               <TabsContent key={day} value={day} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                   {/* Breakfast */}
-                  <Card>
-                    <CardHeader className="py-3">
+                  <Card className="overflow-hidden">
+                    <CardHeader className="py-3 px-3 md:px-4 bg-secondary/20">
                       <CardTitle className="text-sm font-medium">Breakfast</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 py-2">
+                    <CardContent className="space-y-2 py-2 px-2 md:px-4">
                       {mealPlan[day as keyof typeof mealPlan]
                         .filter(meal => meal.type === "breakfast")
                         .map(meal => (
                           <div key={meal.id} className="flex items-center justify-between bg-secondary/40 p-2 rounded-md">
-                            <div>
-                              <p className="text-sm font-medium">{meal.name}</p>
+                            <div className="pr-2">
+                              <p className="text-xs md:text-sm font-medium truncate">{meal.name}</p>
                               <div className="flex text-xs text-muted-foreground space-x-2">
                                 <span>{meal.calories} cal</span>
-                                <span>{meal.protein}g protein</span>
+                                <span>{meal.protein}g</span>
                               </div>
                             </div>
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-6 w-6"
+                              className="h-6 w-6 shrink-0"
                               onClick={() => removeMeal(meal.id)}
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           </div>
                         ))}
                       
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground">
-                            <Plus className="mr-2 h-4 w-4" />
+                          <Button variant="ghost" size="sm" className="w-full justify-start text-xs md:text-sm text-muted-foreground">
+                            <Plus className="mr-1 h-3 w-3 md:h-4 md:w-4" />
                             Add breakfast
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
+                        <DropdownMenuContent align="start" className="max-h-[200px] overflow-y-auto">
                           {availableRecipes
                             .filter(recipe => recipe.type === "breakfast")
                             .map(recipe => (
                               <DropdownMenuItem 
                                 key={recipe.id}
                                 onClick={() => addMeal(recipe)}
+                                className="text-xs md:text-sm"
                               >
                                 {recipe.name} ({recipe.calories} cal)
                               </DropdownMenuItem>
@@ -188,47 +210,48 @@ const MealPlanner = () => {
                   </Card>
                   
                   {/* Lunch */}
-                  <Card>
-                    <CardHeader className="py-3">
+                  <Card className="overflow-hidden">
+                    <CardHeader className="py-3 px-3 md:px-4 bg-secondary/20">
                       <CardTitle className="text-sm font-medium">Lunch</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 py-2">
+                    <CardContent className="space-y-2 py-2 px-2 md:px-4">
                       {mealPlan[day as keyof typeof mealPlan]
                         .filter(meal => meal.type === "lunch")
                         .map(meal => (
                           <div key={meal.id} className="flex items-center justify-between bg-secondary/40 p-2 rounded-md">
-                            <div>
-                              <p className="text-sm font-medium">{meal.name}</p>
+                            <div className="pr-2">
+                              <p className="text-xs md:text-sm font-medium truncate">{meal.name}</p>
                               <div className="flex text-xs text-muted-foreground space-x-2">
                                 <span>{meal.calories} cal</span>
-                                <span>{meal.protein}g protein</span>
+                                <span>{meal.protein}g</span>
                               </div>
                             </div>
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-6 w-6"
+                              className="h-6 w-6 shrink-0"
                               onClick={() => removeMeal(meal.id)}
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           </div>
                         ))}
                       
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground">
-                            <Plus className="mr-2 h-4 w-4" />
+                          <Button variant="ghost" size="sm" className="w-full justify-start text-xs md:text-sm text-muted-foreground">
+                            <Plus className="mr-1 h-3 w-3 md:h-4 md:w-4" />
                             Add lunch
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
+                        <DropdownMenuContent align="start" className="max-h-[200px] overflow-y-auto">
                           {availableRecipes
                             .filter(recipe => recipe.type === "lunch")
                             .map(recipe => (
                               <DropdownMenuItem 
                                 key={recipe.id}
                                 onClick={() => addMeal(recipe)}
+                                className="text-xs md:text-sm"
                               >
                                 {recipe.name} ({recipe.calories} cal)
                               </DropdownMenuItem>
@@ -239,47 +262,48 @@ const MealPlanner = () => {
                   </Card>
                   
                   {/* Dinner */}
-                  <Card>
-                    <CardHeader className="py-3">
+                  <Card className="overflow-hidden">
+                    <CardHeader className="py-3 px-3 md:px-4 bg-secondary/20">
                       <CardTitle className="text-sm font-medium">Dinner</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 py-2">
+                    <CardContent className="space-y-2 py-2 px-2 md:px-4">
                       {mealPlan[day as keyof typeof mealPlan]
                         .filter(meal => meal.type === "dinner")
                         .map(meal => (
                           <div key={meal.id} className="flex items-center justify-between bg-secondary/40 p-2 rounded-md">
-                            <div>
-                              <p className="text-sm font-medium">{meal.name}</p>
+                            <div className="pr-2">
+                              <p className="text-xs md:text-sm font-medium truncate">{meal.name}</p>
                               <div className="flex text-xs text-muted-foreground space-x-2">
                                 <span>{meal.calories} cal</span>
-                                <span>{meal.protein}g protein</span>
+                                <span>{meal.protein}g</span>
                               </div>
                             </div>
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-6 w-6"
+                              className="h-6 w-6 shrink-0"
                               onClick={() => removeMeal(meal.id)}
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           </div>
                         ))}
                       
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground">
-                            <Plus className="mr-2 h-4 w-4" />
+                          <Button variant="ghost" size="sm" className="w-full justify-start text-xs md:text-sm text-muted-foreground">
+                            <Plus className="mr-1 h-3 w-3 md:h-4 md:w-4" />
                             Add dinner
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
+                        <DropdownMenuContent align="start" className="max-h-[200px] overflow-y-auto">
                           {availableRecipes
                             .filter(recipe => recipe.type === "dinner")
                             .map(recipe => (
                               <DropdownMenuItem 
                                 key={recipe.id}
                                 onClick={() => addMeal(recipe)}
+                                className="text-xs md:text-sm"
                               >
                                 {recipe.name} ({recipe.calories} cal)
                               </DropdownMenuItem>
@@ -292,19 +316,20 @@ const MealPlanner = () => {
                 
                 {/* Day summary */}
                 <Card>
-                  <CardContent className="flex items-center justify-between py-4">
+                  <CardContent className="flex flex-col md:flex-row md:items-center justify-between py-3 px-3 md:px-4 md:py-4 gap-2">
                     <div>
-                      <p className="text-sm font-medium">Daily Total</p>
+                      <p className="text-xs md:text-sm font-medium">Daily Total</p>
                       <p className="text-xs text-muted-foreground">
                         {calculateDailyMacros(day as keyof typeof mockMeals).calories} calories | 
                         {calculateDailyMacros(day as keyof typeof mockMeals).protein}g protein
                       </p>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-wrap gap-2">
                       <Badge 
                         variant={calculateDailyMacros(day as keyof typeof mockMeals).calories >= 1800 && 
                                 calculateDailyMacros(day as keyof typeof mockMeals).calories <= 2200 ? 
                                 "default" : "destructive"}
+                        className="text-xs"
                       >
                         Calories: {calculateDailyMacros(day as keyof typeof mockMeals).calories >= 1800 && 
                                     calculateDailyMacros(day as keyof typeof mockMeals).calories <= 2200 ? 
@@ -313,6 +338,7 @@ const MealPlanner = () => {
                       <Badge 
                         variant={calculateDailyMacros(day as keyof typeof mockMeals).protein >= 120 ? 
                                 "default" : "secondary"}
+                        className="text-xs"
                       >
                         Protein: {calculateDailyMacros(day as keyof typeof mockMeals).protein >= 120 ? 
                                     "On Target" : "Needs More"}
@@ -324,9 +350,9 @@ const MealPlanner = () => {
             ))}
           </Tabs>
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Reset Week</Button>
-          <Button>Generate Shopping List</Button>
+        <CardFooter className="flex flex-col md:flex-row gap-2 md:justify-between p-3 md:p-4">
+          <Button variant="outline" size={isMobile ? "sm" : "default"} className="w-full md:w-auto">Reset Week</Button>
+          <Button size={isMobile ? "sm" : "default"} className="w-full md:w-auto">Generate Shopping List</Button>
         </CardFooter>
       </Card>
     </div>

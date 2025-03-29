@@ -16,21 +16,21 @@ const Meals = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
       <Navbar />
       
-      <div className="container mx-auto pt-24 pb-16 px-4">
-        <h1 className="text-3xl font-bold mb-6">Meal Planning</h1>
+      <div className="container mx-auto pt-20 md:pt-24 pb-16 px-3 md:px-4">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${isMobile ? 'flex flex-col gap-2' : 'grid grid-cols-4'} mb-8`}>
-            <TabsTrigger value="generator" className={isMobile ? 'w-full' : ''}>
+          <TabsList className={`${isMobile ? 'flex flex-wrap gap-2' : 'grid grid-cols-4'} mb-6 md:mb-8`}>
+            <TabsTrigger value="generator" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
               {isMobile ? 'AI Generator' : 'AI Recipe Generator'}
             </TabsTrigger>
-            <TabsTrigger value="planner" className={isMobile ? 'w-full' : ''}>
+            <TabsTrigger value="planner" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
               Meal Planner
             </TabsTrigger>
-            <TabsTrigger value="grocery" className={isMobile ? 'w-full' : ''}>
+            <TabsTrigger value="grocery" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
               {isMobile ? 'Grocery' : 'Grocery Lists'}
             </TabsTrigger>
-            <TabsTrigger value="tutorials" className={isMobile ? 'w-full' : ''}>
+            <TabsTrigger value="tutorials" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
               {isMobile ? 'Tutorials' : 'Cooking Tutorials'}
             </TabsTrigger>
           </TabsList>
