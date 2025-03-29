@@ -36,14 +36,22 @@ const App = () => {
   const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        setIsLoading(false);
+        
+        // Check if this is a new sign-up
+        if (event === 'SIGNED_IN') {
+          // Check if user has a profile set up
+          checkUserProfile(session?.user?.id);
+        } else {
+          setIsLoading(false);
+        }
       }
     );
 
@@ -51,13 +59,49 @@ const App = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setIsLoading(false);
+      
+      if (session?.user) {
+        checkUserProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  // Protected route component
+  // Function to check if user has completed profile setup
+  const checkUserProfile = async (userId) => {
+    if (!userId) {
+      setIsLoading(false);
+      return;
+    }
+    
+    try {
+      // Check if user has a profile with metrics filled out
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('weight, height, fitness_goal, body_fat_percentage')
+        .eq('id', userId)
+        .single();
+        
+      if (error) throw error;
+      
+      // If profile doesn't exist or required fields are missing, mark as new user
+      setIsNewUser(!data || 
+        !data.weight || 
+        !data.height || 
+        !data.fitness_goal || 
+        !data.body_fat_percentage);
+      
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error checking user profile:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // Protected route component with onboarding check
   const ProtectedRoute = ({ children }) => {
     if (isLoading) {
       return (
@@ -74,13 +118,18 @@ const App = () => {
       return <Navigate to="/auth" replace />;
     }
     
+    // Redirect to onboarding if new user
+    if (isNewUser && window.location.pathname !== "/onboarding") {
+      return <Navigate to="/onboarding" replace />;
+    }
+    
     return children;
   };
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <AuthContext.Provider value={{ session, user, isLoading }}>
+        <AuthContext.Provider value={{ session, user, isLoading, isNewUser }}>
           <TooltipProvider>
             <Toaster />
             <Sonner />

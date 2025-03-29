@@ -38,6 +38,10 @@ interface ProfileFormValues {
   cookingTime: string;
   mealPrepPreference: string;
   cookingSkill: string;
+  bodyFatPercentage: number;
+  buildMuscleWhileLosing: boolean;
+  proteinIntake: string;
+  customProteinAmount: string;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ 
@@ -48,6 +52,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [bmiCategory, setBmiCategory] = useState("");
   
   const form = useForm<ProfileFormValues>({
     defaultValues: {
@@ -62,6 +67,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       fitnessGoal: "weight-loss",
       targetWeight: "",
       weeklyGoal: "0.5",
+      bodyFatPercentage: 15,
+      buildMuscleWhileLosing: true,
+      proteinIntake: "high",
+      customProteinAmount: "",
       
       // Activity
       dailyActivity: "sedentary",
@@ -80,6 +89,40 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       cookingSkill: "beginner"
     },
   });
+  
+  // Calculate BMI whenever height or weight changes
+  useEffect(() => {
+    const height = parseFloat(form.watch("height"));
+    const weight = parseFloat(form.watch("weight"));
+    
+    if (height && weight) {
+      const heightInMeters = height / 100;
+      const bmi = weight / (heightInMeters * heightInMeters);
+      
+      if (bmi < 18.5) {
+        setBmiCategory("underweight");
+      } else if (bmi >= 18.5 && bmi < 25) {
+        setBmiCategory("healthy");
+      } else if (bmi >= 25 && bmi < 30) {
+        setBmiCategory("overweight");
+      } else {
+        setBmiCategory("obese");
+      }
+      
+      // If user is underweight, suggest weight gain
+      if (bmi < 18.5 && form.watch("fitnessGoal") === "weight-loss") {
+        form.setValue("fitnessGoal", "muscle-gain");
+        toast.info("Based on your BMI, we recommend focusing on muscle gain rather than weight loss.");
+      }
+      
+      // If user is overweight, suggest weight loss with muscle retention
+      if (bmi >= 25 && form.watch("fitnessGoal") === "muscle-gain") {
+        form.setValue("fitnessGoal", "recomp");
+        form.setValue("buildMuscleWhileLosing", true);
+        toast.info("Based on your BMI, we recommend body recomposition to build muscle while losing fat.");
+      }
+    }
+  }, [form.watch("height"), form.watch("weight")]);
   
   // Fetch user profile on component mount
   useEffect(() => {
@@ -121,7 +164,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             dislikedIngredients: data.disliked_ingredients || [],
             cookingTime: data.cooking_time || "any",
             mealPrepPreference: data.meal_prep_preference || "daily",
-            cookingSkill: data.cooking_skill || "beginner"
+            cookingSkill: data.cooking_skill || "beginner",
+            bodyFatPercentage: data.body_fat_percentage || 15,
+            buildMuscleWhileLosing: data.build_muscle_while_losing || true,
+            proteinIntake: data.protein_intake || "high",
+            customProteinAmount: data.custom_protein_amount?.toString() || ""
           };
           
           form.reset(updatedValues);
@@ -191,6 +238,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         cooking_time: formValues.cookingTime,
         meal_prep_preference: formValues.mealPrepPreference,
         cooking_skill: formValues.cookingSkill,
+        body_fat_percentage: formValues.bodyFatPercentage,
+        build_muscle_while_losing: formValues.buildMuscleWhileLosing,
+        protein_intake: formValues.proteinIntake,
+        custom_protein_amount: formValues.customProteinAmount ? parseFloat(formValues.customProteinAmount) : null,
         updated_at: new Date().toISOString()
       };
       
@@ -257,6 +308,23 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               style={{ width: `${((currentStep + 1) / sections.length) * 100}%` }}
             ></div>
           </div>
+        </div>
+      )}
+
+      {/* Show BMI result if height and weight are entered */}
+      {form.watch("height") && form.watch("weight") && bmiCategory && (
+        <div className={`mb-6 p-4 rounded-lg ${
+          bmiCategory === "healthy" ? "bg-green-100 dark:bg-green-900/30" :
+          bmiCategory === "underweight" ? "bg-blue-100 dark:bg-blue-900/30" :
+          "bg-amber-100 dark:bg-amber-900/30"
+        }`}>
+          <h3 className="font-medium mb-1">Your BMI Result</h3>
+          <p className="text-sm">
+            Based on your height and weight, your BMI indicates you are <span className="font-medium">{bmiCategory}</span>.
+            {bmiCategory === "underweight" && " We recommend focusing on muscle gain and increasing your caloric intake."}
+            {bmiCategory === "overweight" && " We recommend a balanced approach to reduce body fat while maintaining muscle mass."}
+            {bmiCategory === "obese" && " We recommend focusing on weight loss with guidance from health professionals."}
+          </p>
         </div>
       )}
 

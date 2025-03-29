@@ -1,18 +1,21 @@
 
 import React, { useState, useEffect } from "react";
-import { Activity, Weight } from "lucide-react";
+import { Activity, Weight, Percent } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BMICalculatorProps {
   className?: string;
+  initialHeight?: number;
+  initialWeight?: number;
 }
 
-const BMICalculator: React.FC<BMICalculatorProps> = ({ className }) => {
-  const [height, setHeight] = useState<number>(170);
-  const [weight, setWeight] = useState<number>(70);
+const BMICalculator: React.FC<BMICalculatorProps> = ({ className, initialHeight, initialWeight }) => {
+  const [height, setHeight] = useState<number>(initialHeight || 170);
+  const [weight, setWeight] = useState<number>(initialWeight || 70);
   const [bmi, setBmi] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
   const [categoryColor, setCategoryColor] = useState<string>("text-primary");
+  const [bodyFatEstimate, setBodyFatEstimate] = useState<number>(0);
 
   useEffect(() => {
     calculateBMI();
@@ -23,6 +26,23 @@ const BMICalculator: React.FC<BMICalculatorProps> = ({ className }) => {
     const heightInMeters = height / 100;
     const bmiValue = weight / (heightInMeters * heightInMeters);
     setBmi(Math.round(bmiValue * 10) / 10);
+
+    // Estimate body fat percentage based on BMI
+    // This is a very rough estimation and should not be used clinically
+    let bodyFat = 0;
+    if (bmiValue < 18.5) {
+      bodyFat = 10 + (bmiValue - 15) * 0.5;
+    } else if (bmiValue >= 18.5 && bmiValue < 25) {
+      bodyFat = 15 + (bmiValue - 18.5) * 0.8;
+    } else if (bmiValue >= 25 && bmiValue < 30) {
+      bodyFat = 20 + (bmiValue - 25) * 1;
+    } else {
+      bodyFat = 25 + (bmiValue - 30) * 1.2;
+    }
+    
+    // Clamp body fat estimate to reasonable range
+    bodyFat = Math.max(5, Math.min(45, bodyFat));
+    setBodyFatEstimate(Math.round(bodyFat));
 
     // Determine BMI category
     if (bmiValue < 18.5) {
@@ -123,6 +143,43 @@ const BMICalculator: React.FC<BMICalculatorProps> = ({ className }) => {
               <div className="w-[25%] bg-red-500"></div>
             </div>
           </div>
+        </div>
+        
+        {/* Body fat estimate */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <Percent className="w-4 h-4 mr-1 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Estimated Body Fat</p>
+            </div>
+            <p className="font-medium">{bodyFatEstimate}%</p>
+          </div>
+          
+          <div className="mt-1 text-xs text-muted-foreground">
+            {bodyFatEstimate < 10 && "Very low body fat - typically seen in elite athletes"}
+            {bodyFatEstimate >= 10 && bodyFatEstimate < 15 && "Athletic - low body fat percentage with visible muscle definition"}
+            {bodyFatEstimate >= 15 && bodyFatEstimate < 20 && "Fit - moderate body fat with good muscle tone"}
+            {bodyFatEstimate >= 20 && bodyFatEstimate < 25 && "Average - typical healthy range for most adults"}
+            {bodyFatEstimate >= 25 && bodyFatEstimate < 30 && "Above average - consider focusing on reducing body fat"}
+            {bodyFatEstimate >= 30 && "High body fat - consider a weight management program"}
+          </div>
+        </div>
+        
+        {/* Recommendations */}
+        <div className="mt-4 p-3 bg-secondary/50 rounded-lg text-sm">
+          <p className="font-medium mb-1">Health Recommendations:</p>
+          {category === "Underweight" && (
+            <p>Consider increasing caloric intake and focusing on muscle building exercises. Consult with a nutritionist for a personalized plan.</p>
+          )}
+          {category === "Healthy" && (
+            <p>Maintain your current healthy lifestyle with regular exercise and balanced nutrition.</p>
+          )}
+          {category === "Overweight" && (
+            <p>Focus on gradually reducing body fat through increased physical activity and a slight caloric deficit. Prioritize high protein intake to maintain muscle mass.</p>
+          )}
+          {category === "Obese" && (
+            <p>Consider working with healthcare professionals to develop a comprehensive weight management plan focusing on sustainable lifestyle changes.</p>
+          )}
         </div>
       </div>
     </div>

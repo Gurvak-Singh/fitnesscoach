@@ -11,7 +11,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { Target, TrendingUp, Dumbbell, Heart } from "lucide-react";
+import { Target, TrendingUp, Dumbbell, Heart, Scale, Percent } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 
 interface GoalSectionProps {
   form: UseFormReturn<any>;
@@ -74,6 +76,15 @@ const GoalSection: React.FC<GoalSectionProps> = ({ form }) => {
                     Maintenance
                   </FormLabel>
                 </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="recomp" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer flex items-center">
+                    <Scale className="w-4 h-4 mr-2" />
+                    Body Recomposition
+                  </FormLabel>
+                </FormItem>
               </RadioGroup>
             </FormControl>
             <FormMessage />
@@ -81,7 +92,71 @@ const GoalSection: React.FC<GoalSectionProps> = ({ form }) => {
         )}
       />
 
-      {(form.watch("fitnessGoal") === "weight-loss" || form.watch("fitnessGoal") === "muscle-gain") && (
+      {/* Body fat percentage target */}
+      <FormField
+        control={form.control}
+        name="bodyFatPercentage"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="flex items-center">
+              <Percent className="w-4 h-4 mr-2" />
+              Target Body Fat Percentage
+            </FormLabel>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">{field.value || 15}%</span>
+                <span className="text-xs text-muted-foreground">
+                  {field.value < 10 ? 'Athletic' : 
+                   field.value < 15 ? 'Fitness' : 
+                   field.value < 20 ? 'Healthy' : 'Standard'}
+                </span>
+              </div>
+              <FormControl>
+                <Slider
+                  min={5}
+                  max={30}
+                  step={1}
+                  value={[field.value || 15]}
+                  onValueChange={(vals) => field.onChange(vals[0])}
+                />
+              </FormControl>
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>5%</span>
+                <span>15%</span>
+                <span>30%</span>
+              </div>
+            </div>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {(form.watch("fitnessGoal") === "weight-loss" || form.watch("fitnessGoal") === "recomp") && (
+        <FormField
+          control={form.control}
+          name="buildMuscleWhileLosing"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  Focus on muscle retention during weight loss
+                </FormLabel>
+                <p className="text-sm text-muted-foreground">
+                  Prioritize high protein intake to maintain and build muscle while losing fat
+                </p>
+              </div>
+            </FormItem>
+          )}
+        />
+      )}
+
+      {(form.watch("fitnessGoal") === "weight-loss" || form.watch("fitnessGoal") === "muscle-gain" || form.watch("fitnessGoal") === "recomp") && (
         <>
           <FormField
             control={form.control}
@@ -109,6 +184,8 @@ const GoalSection: React.FC<GoalSectionProps> = ({ form }) => {
                 <FormLabel>
                   {form.watch("fitnessGoal") === "weight-loss" 
                     ? "Weekly weight loss goal (kg)" 
+                    : form.watch("fitnessGoal") === "recomp"
+                    ? "Weekly body change goal (kg)"
                     : "Weekly weight gain goal (kg)"}
                 </FormLabel>
                 <Select 
@@ -132,6 +209,53 @@ const GoalSection: React.FC<GoalSectionProps> = ({ form }) => {
             )}
           />
         </>
+      )}
+
+      <FormField
+        control={form.control}
+        name="proteinIntake"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Daily Protein Target</FormLabel>
+            <Select 
+              onValueChange={field.onChange} 
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select protein target" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="moderate">Moderate (0.8g per kg of bodyweight)</SelectItem>
+                <SelectItem value="high">High (1.6g per kg of bodyweight)</SelectItem>
+                <SelectItem value="very-high">Very High (2.2g per kg of bodyweight)</SelectItem>
+                <SelectItem value="custom">Custom Amount</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {form.watch("proteinIntake") === "custom" && (
+        <FormField
+          control={form.control}
+          name="customProteinAmount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Custom Protein Amount (g per day)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Enter protein amount" 
+                  type="number" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       )}
     </div>
   );

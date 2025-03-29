@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Card, 
   CardContent, 
@@ -9,26 +9,28 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Utensils, ChefHat, ThumbsUp, ThumbsDown, Save, RefreshCw } from "lucide-react";
+import { Utensils, ChefHat, ThumbsUp, ThumbsDown, Save, RefreshCw, Dumbbell } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { Slider } from "@/components/ui/slider";
 
-// Mock recipes data
+// Extended mock recipes data with high protein options
 const mockRecipes = [
   {
     id: 1,
-    title: "Protein-Packed Quinoa Bowl",
+    title: "High-Protein Quinoa Bowl",
     description: "A balanced meal with complete proteins and essential nutrients.",
     image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
     prepTime: "20 min",
     calories: 450,
-    macros: { protein: 24, carbs: 42, fat: 18 },
+    macros: { protein: 32, carbs: 42, fat: 18 },
     ingredients: [
       "1 cup cooked quinoa",
-      "4 oz grilled chicken breast",
+      "6 oz grilled chicken breast",
       "1/2 avocado, sliced",
       "1/4 cup black beans",
       "1/4 cup corn",
@@ -41,7 +43,8 @@ const mockRecipes = [
       "Assemble all ingredients in a bowl",
       "Drizzle with lime dressing and serve"
     ],
-    nutrients: ["Protein", "Fiber", "Vitamin C", "Healthy Fats"]
+    nutrients: ["High Protein", "Fiber", "Vitamin C", "Healthy Fats"],
+    tags: ["high-protein", "muscle-building"]
   },
   {
     id: 2,
@@ -50,9 +53,9 @@ const mockRecipes = [
     image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288",
     prepTime: "25 min",
     calories: 520,
-    macros: { protein: 35, carbs: 28, fat: 22 },
+    macros: { protein: 40, carbs: 28, fat: 22 },
     ingredients: [
-      "5 oz salmon fillet",
+      "6 oz salmon fillet",
       "1 cup roasted vegetables (zucchini, bell peppers, red onion)",
       "1/2 cup couscous",
       "2 tbsp tzatziki sauce",
@@ -67,7 +70,61 @@ const mockRecipes = [
       "Roast vegetables with olive oil at 425°F for 20 minutes",
       "Plate all components and garnish with fresh dill"
     ],
-    nutrients: ["Omega-3", "Protein", "Vitamin D", "Antioxidants"]
+    nutrients: ["Omega-3", "High Protein", "Vitamin D", "Antioxidants"],
+    tags: ["high-protein", "low-carb"]
+  },
+  {
+    id: 3,
+    title: "Protein-Packed Greek Yogurt Parfait",
+    description: "Perfect breakfast or snack with exceptional protein content.",
+    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777",
+    prepTime: "10 min",
+    calories: 380,
+    macros: { protein: 35, carbs: 30, fat: 12 },
+    ingredients: [
+      "2 cups Greek yogurt (0% fat)",
+      "1 scoop protein powder",
+      "1/4 cup mixed berries",
+      "2 tbsp honey",
+      "1/4 cup low-sugar granola",
+      "1 tbsp chia seeds",
+      "1 tbsp almond butter"
+    ],
+    instructions: [
+      "Mix protein powder into Greek yogurt",
+      "Layer yogurt, berries, and granola in a glass",
+      "Drizzle with honey and almond butter",
+      "Top with chia seeds"
+    ],
+    nutrients: ["High Protein", "Probiotics", "Antioxidants", "Fiber"],
+    tags: ["high-protein", "quick-prep", "breakfast"]
+  },
+  {
+    id: 4,
+    title: "Lean Beef Stir Fry",
+    description: "Muscle-building high protein dinner with minimal fat.",
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19",
+    prepTime: "15 min",
+    calories: 460,
+    macros: { protein: 45, carbs: 28, fat: 16 },
+    ingredients: [
+      "8 oz lean beef strips",
+      "2 cups mixed vegetables (broccoli, bell peppers, snap peas)",
+      "2 cloves garlic, minced",
+      "1 tbsp ginger, grated",
+      "2 tbsp low-sodium soy sauce",
+      "1 tbsp sesame oil",
+      "1/2 cup brown rice"
+    ],
+    instructions: [
+      "Cook brown rice according to package",
+      "Stir-fry beef in a hot wok until browned",
+      "Add vegetables, garlic, and ginger",
+      "Add soy sauce and sesame oil",
+      "Serve over brown rice"
+    ],
+    nutrients: ["High Protein", "Iron", "Vitamin C", "Zinc"],
+    tags: ["high-protein", "muscle-building", "low-fat"]
   }
 ];
 
@@ -75,23 +132,85 @@ const AiMealGenerator = () => {
   const [recipes, setRecipes] = useState(mockRecipes);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
   const [preferences, setPreferences] = useState({
     highProtein: true,
     lowCarb: false,
     vegetarian: false,
-    quick: true
+    quick: true,
+    proteinTarget: 40 // Default target percentage of calories from protein
   });
   
   const currentRecipe = recipes[currentRecipeIndex];
   
+  // Fetch user profile to get dietary preferences
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) return;
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+          
+        if (error) throw error;
+        
+        if (data) {
+          setUserProfile(data);
+          
+          // Update preferences based on profile
+          const newPreferences = { ...preferences };
+          
+          if (data.fitness_goal === 'muscle-gain' || data.build_muscle_while_losing) {
+            newPreferences.highProtein = true;
+          }
+          
+          if (data.diet_type === 'low-carb' || data.diet_type === 'keto') {
+            newPreferences.lowCarb = true;
+          }
+          
+          if (data.diet_type === 'vegetarian' || data.diet_type === 'vegan') {
+            newPreferences.vegetarian = true;
+          }
+          
+          // Set protein target based on user's profile
+          if (data.protein_intake === 'high') {
+            newPreferences.proteinTarget = 40; // 40% of calories from protein
+          } else if (data.protein_intake === 'very-high') {
+            newPreferences.proteinTarget = 50; // 50% of calories from protein
+          } else if (data.protein_intake === 'moderate') {
+            newPreferences.proteinTarget = 30; // 30% of calories from protein
+          }
+          
+          setPreferences(newPreferences);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+    
+    fetchUserProfile();
+  }, []);
+  
   const generateNewRecipe = () => {
     setLoading(true);
     // In a real app, this would call an API to generate a new recipe
+    // based on user preferences and dietary needs
     setTimeout(() => {
       // Mock new recipe generation by cycling through existing ones
       setCurrentRecipeIndex((prevIndex) => (prevIndex + 1) % recipes.length);
       setLoading(false);
-      toast.success("New recipe generated based on your preferences!");
+      
+      // Show protein-focused message if high protein is enabled
+      if (preferences.highProtein) {
+        toast.success("High-protein recipe generated to support your muscle-building goals!");
+      } else {
+        toast.success("New recipe generated based on your preferences!");
+      }
     }, 1500);
   };
   
@@ -119,9 +238,12 @@ const AiMealGenerator = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="high-protein">High Protein</Label>
+                <Label htmlFor="high-protein" className="flex items-center">
+                  <Dumbbell className="w-4 h-4 mr-2 text-primary" />
+                  High Protein
+                </Label>
                 <p className="text-xs text-muted-foreground">
-                  Focus on protein-rich meals
+                  Focus on protein-rich meals for muscle building
                 </p>
               </div>
               <Switch 
@@ -130,6 +252,26 @@ const AiMealGenerator = () => {
                 onCheckedChange={(checked) => setPreferences({...preferences, highProtein: checked})}
               />
             </div>
+            
+            {preferences.highProtein && (
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <Label>Protein Target: {preferences.proteinTarget}%</Label>
+                  <span className="text-xs text-muted-foreground">
+                    {preferences.proteinTarget < 30 ? 'Standard' : 
+                     preferences.proteinTarget < 40 ? 'Athletic' : 
+                     preferences.proteinTarget < 50 ? 'Bodybuilding' : 'Maximum'}
+                  </span>
+                </div>
+                <Slider
+                  min={20}
+                  max={60}
+                  step={5}
+                  value={[preferences.proteinTarget]}
+                  onValueChange={(vals) => setPreferences({...preferences, proteinTarget: vals[0]})}
+                />
+              </div>
+            )}
             
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -232,6 +374,27 @@ const AiMealGenerator = () => {
             </div>
           </div>
           
+          {/* Protein percentage calculation */}
+          {preferences.highProtein && (
+            <div className="p-3 bg-primary/10 rounded-md">
+              <div className="flex justify-between items-center mb-1">
+                <p className="text-sm font-medium flex items-center">
+                  <Dumbbell className="w-4 h-4 mr-2 text-primary" />
+                  Protein Content
+                </p>
+                <Badge variant="secondary">
+                  {Math.round((currentRecipe.macros.protein * 4 / currentRecipe.calories) * 100)}% of calories
+                </Badge>
+              </div>
+              <div className="w-full bg-secondary/50 rounded-full h-2">
+                <div 
+                  className="bg-primary rounded-full h-2 transition-all duration-300" 
+                  style={{ width: `${Math.min(100, Math.round((currentRecipe.macros.protein * 4 / currentRecipe.calories) * 100))}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Ingredients */}
             <div>
@@ -262,7 +425,9 @@ const AiMealGenerator = () => {
             <h3 className="font-medium mb-2">Nutritional Highlights</h3>
             <div className="flex flex-wrap gap-2">
               {currentRecipe.nutrients.map((nutrient, index) => (
-                <Badge key={index} variant="secondary">{nutrient}</Badge>
+                <Badge key={index} variant={nutrient === "High Protein" ? "default" : "secondary"}>
+                  {nutrient}
+                </Badge>
               ))}
             </div>
           </div>

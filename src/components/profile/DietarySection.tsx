@@ -8,32 +8,69 @@ import {
   FormMessage 
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { Utensils, CheckCircle2, AlertCircle } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Utensils } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface DietarySectionProps {
   form: UseFormReturn<any>;
 }
 
-const cuisineOptions = [
-  { id: "italian", label: "Italian" },
-  { id: "mexican", label: "Mexican" },
-  { id: "asian", label: "Asian" },
-  { id: "mediterranean", label: "Mediterranean" },
-  { id: "indian", label: "Indian" },
-  { id: "american", label: "American" },
-  { id: "middle-eastern", label: "Middle Eastern" },
-];
-
 const DietarySection: React.FC<DietarySectionProps> = ({ form }) => {
+  // Expanded cuisine options
+  const cuisineOptions = [
+    "Italian", "Mexican", "Chinese", "Japanese", "Thai", "Indian", 
+    "Mediterranean", "American", "French", "Spanish", "Greek", 
+    "Korean", "Vietnamese", "Middle Eastern", "Caribbean", "Brazilian",
+    "Moroccan", "Ethiopian", "Turkish", "Lebanese", "Persian",
+    "British", "German", "Russian", "Polish", "Nordic",
+    "Malaysian", "Indonesian", "Filipino", "Hawaiian", "Cajun",
+    "Soul Food", "Southern US", "Tex-Mex", "Californian", "Fusion"
+  ];
+  
+  const handleAddCuisine = (cuisine: string, currentSelections: string[]) => {
+    if (!currentSelections.includes(cuisine)) {
+      return [...currentSelections, cuisine];
+    }
+    return currentSelections;
+  };
+
+  const handleRemoveCuisine = (cuisineToRemove: string, currentSelections: string[]) => {
+    return currentSelections.filter(cuisine => cuisine !== cuisineToRemove);
+  };
+
+  const handleAddAllergy = (allergy: string, currentAllergies: string[]) => {
+    const allergyTrimmed = allergy.trim();
+    if (allergyTrimmed && !currentAllergies.includes(allergyTrimmed)) {
+      return [...currentAllergies, allergyTrimmed];
+    }
+    return currentAllergies;
+  };
+
+  const handleRemoveAllergy = (allergyToRemove: string, currentAllergies: string[]) => {
+    return currentAllergies.filter(allergy => allergy !== allergyToRemove);
+  };
+
+  const handleAddDislikedIngredient = (ingredient: string, currentIngredients: string[]) => {
+    const ingredientTrimmed = ingredient.trim();
+    if (ingredientTrimmed && !currentIngredients.includes(ingredientTrimmed)) {
+      return [...currentIngredients, ingredientTrimmed];
+    }
+    return currentIngredients;
+  };
+
+  const handleRemoveDislikedIngredient = (ingredientToRemove: string, currentIngredients: string[]) => {
+    return currentIngredients.filter(ingredient => ingredient !== ingredientToRemove);
+  };
+
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
         <Utensils className="w-12 h-12 text-primary mx-auto mb-2" />
         <h2 className="text-xl font-semibold">Dietary Preferences</h2>
-        <p className="text-muted-foreground">Customize your meal plan to fit your needs</p>
+        <p className="text-muted-foreground">Tell us about your eating habits</p>
       </div>
 
       <FormField
@@ -41,57 +78,92 @@ const DietarySection: React.FC<DietarySectionProps> = ({ form }) => {
         name="dietType"
         render={({ field }) => (
           <FormItem className="space-y-3">
-            <FormLabel>Diet Type</FormLabel>
+            <FormLabel>Dietary Restrictions</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="space-y-3"
+                className="grid grid-cols-1 gap-2 sm:grid-cols-2"
               >
-                <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="no-restriction" className="mt-1" />
+                    <RadioGroupItem value="no-restriction" />
                   </FormControl>
-                  <div>
-                    <FormLabel className="font-medium cursor-pointer">No Restrictions</FormLabel>
-                    <p className="text-xs text-muted-foreground">All types of foods</p>
-                  </div>
+                  <FormLabel className="font-normal cursor-pointer">
+                    No Restrictions
+                  </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="vegetarian" className="mt-1" />
+                    <RadioGroupItem value="vegetarian" />
                   </FormControl>
-                  <div>
-                    <FormLabel className="font-medium cursor-pointer">Vegetarian</FormLabel>
-                    <p className="text-xs text-muted-foreground">No meat or fish</p>
-                  </div>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Vegetarian
+                  </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="vegan" className="mt-1" />
+                    <RadioGroupItem value="vegan" />
                   </FormControl>
-                  <div>
-                    <FormLabel className="font-medium cursor-pointer">Vegan</FormLabel>
-                    <p className="text-xs text-muted-foreground">No animal products</p>
-                  </div>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Vegan
+                  </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="pescatarian" className="mt-1" />
+                    <RadioGroupItem value="pescatarian" />
                   </FormControl>
-                  <div>
-                    <FormLabel className="font-medium cursor-pointer">Pescatarian</FormLabel>
-                    <p className="text-xs text-muted-foreground">Vegetarian plus seafood</p>
-                  </div>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Pescatarian
+                  </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="keto" className="mt-1" />
+                    <RadioGroupItem value="keto" />
                   </FormControl>
-                  <div>
-                    <FormLabel className="font-medium cursor-pointer">Keto</FormLabel>
-                    <p className="text-xs text-muted-foreground">Low carb, high fat</p>
-                  </div>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Ketogenic
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="paleo" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Paleo
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="gluten-free" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Gluten Free
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="dairy-free" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Dairy Free
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="low-carb" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    Low Carb
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="high-protein" />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    High Protein
+                  </FormLabel>
                 </FormItem>
               </RadioGroup>
             </FormControl>
@@ -105,34 +177,43 @@ const DietarySection: React.FC<DietarySectionProps> = ({ form }) => {
         name="cuisinePreferences"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="flex items-center">
-              <CheckCircle2 className="w-4 h-4 mr-2" />
-              Cuisine Preferences
-            </FormLabel>
-            <div className="grid grid-cols-2 gap-3 mt-2">
-              {cuisineOptions.map((cuisine) => (
-                <FormItem
-                  key={cuisine.id}
-                  className="flex items-center space-x-2 space-y-0"
-                >
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value?.includes(cuisine.id)}
-                      onCheckedChange={(checked) => {
-                        const updatedValue = checked
-                          ? [...(field.value || []), cuisine.id]
-                          : (field.value || []).filter(
-                              (value: string) => value !== cuisine.id
-                            );
-                        field.onChange(updatedValue);
-                      }}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal text-sm cursor-pointer">
-                    {cuisine.label}
-                  </FormLabel>
-                </FormItem>
-              ))}
+            <FormLabel>Cuisine Preferences</FormLabel>
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {cuisineOptions.map((cuisine) => (
+                  <Badge 
+                    key={cuisine}
+                    variant={field.value.includes(cuisine) ? "default" : "outline"}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (field.value.includes(cuisine)) {
+                        field.onChange(handleRemoveCuisine(cuisine, field.value));
+                      } else {
+                        field.onChange(handleAddCuisine(cuisine, field.value));
+                      }
+                    }}
+                  >
+                    {cuisine}
+                  </Badge>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {field.value.map((cuisine: string) => (
+                  <Badge 
+                    key={cuisine} 
+                    className="bg-primary/80"
+                  >
+                    {cuisine}
+                    <button
+                      type="button"
+                      className="ml-1"
+                      onClick={() => field.onChange(handleRemoveCuisine(cuisine, field.value))}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
             </div>
             <FormMessage />
           </FormItem>
@@ -144,23 +225,51 @@ const DietarySection: React.FC<DietarySectionProps> = ({ form }) => {
         name="allergies"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="flex items-center">
-              <AlertCircle className="w-4 h-4 mr-2" />
-              Allergies & Restrictions
-            </FormLabel>
-            <FormControl>
-              <Input
-                placeholder="e.g. Nuts, Gluten, Dairy (comma separated)"
-                {...field}
-                value={field.value?.join(", ") || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  field.onChange(
-                    value.split(",").map((item) => item.trim()).filter(Boolean)
-                  );
-                }}
-              />
-            </FormControl>
+            <FormLabel>Food Allergies or Intolerances</FormLabel>
+            <div className="space-y-2">
+              <div className="flex">
+                <Input
+                  placeholder="Add an allergy (e.g., peanuts, shellfish)"
+                  className="rounded-r-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const input = e.currentTarget;
+                      field.onChange(handleAddAllergy(input.value, field.value));
+                      input.value = '';
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="px-3 bg-primary text-primary-foreground rounded-r-md"
+                  onClick={(e) => {
+                    const input = (e.currentTarget.previousSibling as HTMLInputElement);
+                    field.onChange(handleAddAllergy(input.value, field.value));
+                    input.value = '';
+                  }}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {field.value.map((allergy: string) => (
+                  <Badge 
+                    key={allergy} 
+                    variant="destructive"
+                  >
+                    {allergy}
+                    <button
+                      type="button"
+                      className="ml-1"
+                      onClick={() => field.onChange(handleRemoveAllergy(allergy, field.value))}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            </div>
             <FormMessage />
           </FormItem>
         )}
@@ -172,19 +281,50 @@ const DietarySection: React.FC<DietarySectionProps> = ({ form }) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Disliked Ingredients</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="e.g. Mushrooms, Olives, Cilantro (comma separated)"
-                {...field}
-                value={field.value?.join(", ") || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  field.onChange(
-                    value.split(",").map((item) => item.trim()).filter(Boolean)
-                  );
-                }}
-              />
-            </FormControl>
+            <div className="space-y-2">
+              <div className="flex">
+                <Input
+                  placeholder="Add an ingredient (e.g., cilantro, olives)"
+                  className="rounded-r-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const input = e.currentTarget;
+                      field.onChange(handleAddDislikedIngredient(input.value, field.value));
+                      input.value = '';
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="px-3 bg-primary text-primary-foreground rounded-r-md"
+                  onClick={(e) => {
+                    const input = (e.currentTarget.previousSibling as HTMLInputElement);
+                    field.onChange(handleAddDislikedIngredient(input.value, field.value));
+                    input.value = '';
+                  }}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {field.value.map((ingredient: string) => (
+                  <Badge 
+                    key={ingredient} 
+                    variant="secondary"
+                  >
+                    {ingredient}
+                    <button
+                      type="button"
+                      className="ml-1"
+                      onClick={() => field.onChange(handleRemoveDislikedIngredient(ingredient, field.value))}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            </div>
             <FormMessage />
           </FormItem>
         )}
