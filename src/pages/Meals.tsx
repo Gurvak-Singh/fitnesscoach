@@ -35,19 +35,19 @@ const Meals = () => {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator">
+          <TabsContent value="generator" className="pt-1 md:pt-2">
             <AiMealGenerator />
           </TabsContent>
           
-          <TabsContent value="planner">
+          <TabsContent value="planner" className="pt-1 md:pt-2">
             <MealPlanner />
           </TabsContent>
           
-          <TabsContent value="grocery">
+          <TabsContent value="grocery" className="pt-1 md:pt-2">
             <GroceryList />
           </TabsContent>
           
-          <TabsContent value="tutorials">
+          <TabsContent value="tutorials" className="pt-1 md:pt-2">
             <CookingTutorials />
           </TabsContent>
         </Tabs>
