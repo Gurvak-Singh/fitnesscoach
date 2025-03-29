@@ -88,7 +88,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
       <Navbar />
       
-      <div className="container mx-auto pt-24 pb-16 px-4">
+      <div className="container mx-auto pt-20 md:pt-24 pb-16 px-3 md:px-4">
         {session?.user && (
           <DashboardHeader 
             userId={session.user.id}
@@ -97,7 +97,7 @@ const Dashboard = () => {
           />
         )}
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* First row */}
           <ProfileCard className="md:col-span-2" />
           
@@ -107,14 +107,14 @@ const Dashboard = () => {
           
           {/* Third row */}
           {dashboardSections.meals && (
-            <div className="glass-card rounded-2xl p-6 animate-fade-in">
+            <div className="glass-card rounded-2xl p-4 md:p-6 animate-fade-in">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold flex items-center">
-                  <UtensilsCrossed className="w-5 h-5 mr-2 text-primary" />
+                <h2 className="text-lg md:text-xl font-semibold flex items-center">
+                  <UtensilsCrossed className="w-4 h-4 md:w-5 md:h-5 mr-2 text-primary" />
                   Meal Planning
                 </h2>
                 <Link to="/meals">
-                  <Button size="sm">
+                  <Button size={isMobile ? "sm" : "sm"}>
                     View Details
                   </Button>
                 </Link>
@@ -124,14 +124,14 @@ const Dashboard = () => {
           )}
           
           {dashboardSections.fitness && (
-            <div className="glass-card rounded-2xl p-6 animate-fade-in">
+            <div className="glass-card rounded-2xl p-4 md:p-6 animate-fade-in">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold flex items-center">
-                  <Dumbbell className="w-5 h-5 mr-2 text-primary" />
+                <h2 className="text-lg md:text-xl font-semibold flex items-center">
+                  <Dumbbell className="w-4 h-4 md:w-5 md:h-5 mr-2 text-primary" />
                   Fitness Tracking
                 </h2>
                 <Link to="/fitness">
-                  <Button size="sm">
+                  <Button size={isMobile ? "sm" : "sm"}>
                     View Details
                   </Button>
                 </Link>
@@ -142,7 +142,7 @@ const Dashboard = () => {
         </div>
         
         {/* Footer content */}
-        <div className="mt-12 text-center text-sm text-muted-foreground">
+        <div className="mt-8 md:mt-12 text-center text-xs md:text-sm text-muted-foreground">
           <p>FitLife Coach — Your personalized fitness journey</p>
         </div>
       </div>

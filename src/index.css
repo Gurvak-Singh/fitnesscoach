@@ -91,7 +91,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -104,6 +105,17 @@
 
   .glass-effect {
     @apply backdrop-blur-lg bg-white/80 dark:bg-slate-900/80 border border-white/20 dark:border-slate-800/20;
+  }
+  
+  input, button, textarea, select {
+    @apply focus:outline-none;
+  }
+  
+  /* Fix for iOS input zoom */
+  @supports (-webkit-touch-callout: none) {
+    input, select, textarea {
+      @apply text-base;
+    }
   }
 }
 
@@ -136,4 +148,26 @@
 
 .soft-shadow {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .glass-card {
+    @apply p-4;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .hover-scale:hover {
+    transform: none;
+  }
+  
+  button, a {
+    @apply active:opacity-80;
+  }
 }

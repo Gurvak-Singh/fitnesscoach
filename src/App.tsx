@@ -60,7 +60,14 @@ const App = () => {
   // Protected route component
   const ProtectedRoute = ({ children }) => {
     if (isLoading) {
-      return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-12 w-12 bg-primary/30 rounded-full mb-4"></div>
+            <div className="h-4 w-24 bg-secondary rounded"></div>
+          </div>
+        </div>
+      );
     }
     
     if (!session) {
@@ -78,60 +85,62 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter basename={basePath}>
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route 
-                  path="/onboarding" 
-                  element={
-                    <ProtectedRoute>
-                      <Onboarding />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/dashboard" 
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/profile" 
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/fitness" 
-                  element={
-                    <ProtectedRoute>
-                      <Fitness />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/meals" 
-                  element={
-                    <ProtectedRoute>
-                      <Meals />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/community" 
-                  element={
-                    <ProtectedRoute>
-                      <Community />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="flex flex-col min-h-screen overflow-x-hidden">
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route 
+                    path="/onboarding" 
+                    element={
+                      <ProtectedRoute>
+                        <Onboarding />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/profile" 
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/fitness" 
+                    element={
+                      <ProtectedRoute>
+                        <Fitness />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/meals" 
+                    element={
+                      <ProtectedRoute>
+                        <Meals />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/community" 
+                    element={
+                      <ProtectedRoute>
+                        <Community />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
             </BrowserRouter>
           </TooltipProvider>
         </AuthContext.Provider>
