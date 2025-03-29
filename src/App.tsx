@@ -25,6 +25,7 @@ export const AuthContext = React.createContext({
   session: null,
   user: null,
   isLoading: true,
+  isNewUser: false,
 });
 
 const queryClient = new QueryClient();
@@ -85,7 +86,13 @@ const App = () => {
         .eq('id', userId)
         .single();
         
-      if (error) throw error;
+      if (error) {
+        // Handle the error but continue processing
+        console.error("Error checking user profile:", error);
+        setIsNewUser(true);
+        setIsLoading(false);
+        return;
+      }
       
       // If profile doesn't exist or required fields are missing, mark as new user
       setIsNewUser(!data || 

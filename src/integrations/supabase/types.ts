@@ -13,10 +13,13 @@ export type Database = {
         Row: {
           age: number | null
           allergies: string[] | null
+          body_fat_percentage: number | null
+          build_muscle_while_losing: boolean | null
           cooking_skill: string | null
           cooking_time: string | null
           created_at: string
           cuisine_preferences: string[] | null
+          custom_protein_amount: number | null
           daily_activity: string | null
           dashboard_preferences: string[] | null
           dashboard_sections: Json | null
@@ -29,6 +32,7 @@ export type Database = {
           id: string
           meal_prep_preference: string | null
           name: string | null
+          protein_intake: string | null
           sleep_hours: string | null
           target_weight: number | null
           updated_at: string
@@ -38,10 +42,13 @@ export type Database = {
         Insert: {
           age?: number | null
           allergies?: string[] | null
+          body_fat_percentage?: number | null
+          build_muscle_while_losing?: boolean | null
           cooking_skill?: string | null
           cooking_time?: string | null
           created_at?: string
           cuisine_preferences?: string[] | null
+          custom_protein_amount?: number | null
           daily_activity?: string | null
           dashboard_preferences?: string[] | null
           dashboard_sections?: Json | null
@@ -54,6 +61,7 @@ export type Database = {
           id: string
           meal_prep_preference?: string | null
           name?: string | null
+          protein_intake?: string | null
           sleep_hours?: string | null
           target_weight?: number | null
           updated_at?: string
@@ -63,10 +71,13 @@ export type Database = {
         Update: {
           age?: number | null
           allergies?: string[] | null
+          body_fat_percentage?: number | null
+          build_muscle_while_losing?: boolean | null
           cooking_skill?: string | null
           cooking_time?: string | null
           created_at?: string
           cuisine_preferences?: string[] | null
+          custom_protein_amount?: number | null
           daily_activity?: string | null
           dashboard_preferences?: string[] | null
           dashboard_sections?: Json | null
@@ -79,6 +90,7 @@ export type Database = {
           id?: string
           meal_prep_preference?: string | null
           name?: string | null
+          protein_intake?: string | null
           sleep_hours?: string | null
           target_weight?: number | null
           updated_at?: string
