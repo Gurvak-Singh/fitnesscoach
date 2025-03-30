@@ -20,7 +20,7 @@ const Meals = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-6 md:mb-8`}>
+          <TabsList className={`${tabsListClass} mb-8 md:mb-10`}>
             <TabsTrigger value="generator" className={tabTriggerClass}>
               {tabTriggerClass ? 'AI Generator' : 'AI Recipe Generator'}
             </TabsTrigger>
@@ -35,19 +35,19 @@ const Meals = () => {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="pt-3 md:pt-4">
+          <TabsContent value="generator" className="pt-4 md:pt-6">
             <AiMealGenerator />
           </TabsContent>
           
-          <TabsContent value="planner" className="pt-3 md:pt-4">
+          <TabsContent value="planner" className="pt-4 md:pt-6">
             <MealPlanner />
           </TabsContent>
           
-          <TabsContent value="grocery" className="pt-3 md:pt-4">
+          <TabsContent value="grocery" className="pt-4 md:pt-6">
             <GroceryList />
           </TabsContent>
           
-          <TabsContent value="tutorials" className="pt-3 md:pt-4">
+          <TabsContent value="tutorials" className="pt-4 md:pt-6">
             <CookingTutorials />
           </TabsContent>
         </Tabs>

@@ -20,7 +20,7 @@ const Fitness = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Fitness Module</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-6 md:mb-8`}>
+          <TabsList className={`${tabsListClass} mb-8 md:mb-10`}>
             <TabsTrigger value="generator" className={tabTriggerClass}>
               {tabTriggerClass ? 'Generator' : 'Workout Generator'}
             </TabsTrigger>
@@ -35,21 +35,21 @@ const Fitness = () => {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="pt-3 md:pt-4">
+          <TabsContent value="generator" className="pt-4 md:pt-6">
             <WorkoutGenerator />
           </TabsContent>
           
-          <TabsContent value="tracker" className="pt-3 md:pt-4">
+          <TabsContent value="tracker" className="pt-4 md:pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <WorkoutTracker className="md:col-span-2" />
             </div>
           </TabsContent>
           
-          <TabsContent value="history" className="pt-3 md:pt-4">
+          <TabsContent value="history" className="pt-4 md:pt-6">
             <WorkoutHistory />
           </TabsContent>
           
-          <TabsContent value="library" className="pt-3 md:pt-4">
+          <TabsContent value="library" className="pt-4 md:pt-6">
             <ExerciseLibrary />
           </TabsContent>
         </Tabs>
