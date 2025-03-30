@@ -1,4 +1,3 @@
-
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
@@ -49,12 +48,16 @@ export function useResponsive() {
   }
 }
 
-// Add a new common function to handle tab layout classes
+// Enhanced tab layout classes with more styling options
 export function useTabLayoutClasses() {
   const isMobile = useIsMobile()
   
   return {
-    tabsListClass: isMobile ? 'flex flex-wrap gap-2' : 'grid grid-cols-4',
-    tabTriggerClass: isMobile ? 'w-[calc(50%-4px)]' : ''
+    tabsListClass: isMobile 
+      ? 'flex flex-wrap gap-2 w-full bg-secondary/50 p-1.5 rounded-xl' 
+      : 'grid grid-cols-4 w-full bg-secondary/50 p-1.5 rounded-xl',
+    tabTriggerClass: isMobile 
+      ? 'w-[calc(50%-4px)] h-10 rounded-lg transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-800 data-[state=active]:shadow-sm font-medium text-sm' 
+      : 'h-10 rounded-lg transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-800 data-[state=active]:shadow-sm font-medium'
   }
 }

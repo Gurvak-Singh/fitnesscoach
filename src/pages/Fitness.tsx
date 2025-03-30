@@ -17,39 +17,39 @@ const Fitness = () => {
       <Navbar />
       
       <div className="container mx-auto pt-20 md:pt-24 pb-16 px-3 md:px-4">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Fitness Module</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-8">Fitness Module</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-8 md:mb-10`}>
+          <TabsList className={`${tabsListClass} mb-10 md:mb-12`}>
             <TabsTrigger value="generator" className={tabTriggerClass}>
-              {tabTriggerClass ? 'Generator' : 'Workout Generator'}
+              {tabTriggerClass.includes('w-[calc') ? 'Generator' : 'Workout Generator'}
             </TabsTrigger>
             <TabsTrigger value="tracker" className={tabTriggerClass}>
-              {tabTriggerClass ? 'Tracker' : 'Workout Tracker'}
+              {tabTriggerClass.includes('w-[calc') ? 'Tracker' : 'Workout Tracker'}
             </TabsTrigger>
             <TabsTrigger value="history" className={tabTriggerClass}>
-              {tabTriggerClass ? 'History' : 'Progress History'}
+              {tabTriggerClass.includes('w-[calc') ? 'History' : 'Progress History'}
             </TabsTrigger>
             <TabsTrigger value="library" className={tabTriggerClass}>
-              {tabTriggerClass ? 'Exercises' : 'Exercise Library'}
+              {tabTriggerClass.includes('w-[calc') ? 'Exercises' : 'Exercise Library'}
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="pt-4 md:pt-6">
+          <TabsContent value="generator" className="pt-6 md:pt-8">
             <WorkoutGenerator />
           </TabsContent>
           
-          <TabsContent value="tracker" className="pt-4 md:pt-6">
+          <TabsContent value="tracker" className="pt-6 md:pt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <WorkoutTracker className="md:col-span-2" />
             </div>
           </TabsContent>
           
-          <TabsContent value="history" className="pt-4 md:pt-6">
+          <TabsContent value="history" className="pt-6 md:pt-8">
             <WorkoutHistory />
           </TabsContent>
           
-          <TabsContent value="library" className="pt-4 md:pt-6">
+          <TabsContent value="library" className="pt-6 md:pt-8">
             <ExerciseLibrary />
           </TabsContent>
         </Tabs>

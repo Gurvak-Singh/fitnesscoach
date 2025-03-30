@@ -17,37 +17,37 @@ const Meals = () => {
       <Navbar />
       
       <div className="container mx-auto pt-20 md:pt-24 pb-16 px-3 md:px-4">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Meal Planning</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-8">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-8 md:mb-10`}>
+          <TabsList className={`${tabsListClass} mb-10 md:mb-12`}>
             <TabsTrigger value="generator" className={tabTriggerClass}>
-              {tabTriggerClass ? 'AI Generator' : 'AI Recipe Generator'}
+              {tabTriggerClass.includes('w-[calc') ? 'AI Generator' : 'AI Recipe Generator'}
             </TabsTrigger>
             <TabsTrigger value="planner" className={tabTriggerClass}>
               Meal Planner
             </TabsTrigger>
             <TabsTrigger value="grocery" className={tabTriggerClass}>
-              {tabTriggerClass ? 'Grocery' : 'Grocery Lists'}
+              {tabTriggerClass.includes('w-[calc') ? 'Grocery' : 'Grocery Lists'}
             </TabsTrigger>
             <TabsTrigger value="tutorials" className={tabTriggerClass}>
-              {tabTriggerClass ? 'Tutorials' : 'Cooking Tutorials'}
+              {tabTriggerClass.includes('w-[calc') ? 'Tutorials' : 'Cooking Tutorials'}
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="pt-4 md:pt-6">
+          <TabsContent value="generator" className="pt-6 md:pt-8">
             <AiMealGenerator />
           </TabsContent>
           
-          <TabsContent value="planner" className="pt-4 md:pt-6">
+          <TabsContent value="planner" className="pt-6 md:pt-8">
             <MealPlanner />
           </TabsContent>
           
-          <TabsContent value="grocery" className="pt-4 md:pt-6">
+          <TabsContent value="grocery" className="pt-6 md:pt-8">
             <GroceryList />
           </TabsContent>
           
-          <TabsContent value="tutorials" className="pt-4 md:pt-6">
+          <TabsContent value="tutorials" className="pt-6 md:pt-8">
             <CookingTutorials />
           </TabsContent>
         </Tabs>
