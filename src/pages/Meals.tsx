@@ -20,7 +20,7 @@ const Meals = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-8">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-10 md:mb-12`}>
+          <TabsList className={`${tabsListClass} mb-12 md:mb-14`}>
             <TabsTrigger value="generator" className={tabTriggerClass}>
               {tabTriggerClass.includes('w-[calc') ? 'AI Generator' : 'AI Recipe Generator'}
             </TabsTrigger>
