@@ -48,3 +48,13 @@ export function useResponsive() {
     isSmallScreen: isMobile || isTablet
   }
 }
+
+// Add a new common function to handle tab layout classes
+export function useTabLayoutClasses() {
+  const isMobile = useIsMobile()
+  
+  return {
+    tabsListClass: isMobile ? 'flex flex-wrap gap-2' : 'grid grid-cols-4',
+    tabTriggerClass: isMobile ? 'w-[calc(50%-4px)]' : ''
+  }
+}

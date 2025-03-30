@@ -6,11 +6,11 @@ import AiMealGenerator from "@/components/meals/AiMealGenerator";
 import MealPlanner from "@/components/meals/MealPlanner";
 import GroceryList from "@/components/meals/GroceryList";
 import CookingTutorials from "@/components/meals/CookingTutorials";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useTabLayoutClasses } from "@/hooks/use-mobile";
 
 const Meals = () => {
   const [activeTab, setActiveTab] = useState("generator");
-  const isMobile = useIsMobile();
+  const { tabsListClass, tabTriggerClass } = useTabLayoutClasses();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
@@ -20,34 +20,34 @@ const Meals = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${isMobile ? 'flex flex-wrap gap-2' : 'grid grid-cols-4'} mb-6 md:mb-8`}>
-            <TabsTrigger value="generator" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
-              {isMobile ? 'AI Generator' : 'AI Recipe Generator'}
+          <TabsList className={`${tabsListClass} mb-6 md:mb-8`}>
+            <TabsTrigger value="generator" className={tabTriggerClass}>
+              {tabTriggerClass ? 'AI Generator' : 'AI Recipe Generator'}
             </TabsTrigger>
-            <TabsTrigger value="planner" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
+            <TabsTrigger value="planner" className={tabTriggerClass}>
               Meal Planner
             </TabsTrigger>
-            <TabsTrigger value="grocery" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
-              {isMobile ? 'Grocery' : 'Grocery Lists'}
+            <TabsTrigger value="grocery" className={tabTriggerClass}>
+              {tabTriggerClass ? 'Grocery' : 'Grocery Lists'}
             </TabsTrigger>
-            <TabsTrigger value="tutorials" className={isMobile ? 'w-[calc(50%-4px)]' : ''}>
-              {isMobile ? 'Tutorials' : 'Cooking Tutorials'}
+            <TabsTrigger value="tutorials" className={tabTriggerClass}>
+              {tabTriggerClass ? 'Tutorials' : 'Cooking Tutorials'}
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="pt-1 md:pt-2">
+          <TabsContent value="generator" className="pt-3 md:pt-4">
             <AiMealGenerator />
           </TabsContent>
           
-          <TabsContent value="planner" className="pt-1 md:pt-2">
+          <TabsContent value="planner" className="pt-3 md:pt-4">
             <MealPlanner />
           </TabsContent>
           
-          <TabsContent value="grocery" className="pt-1 md:pt-2">
+          <TabsContent value="grocery" className="pt-3 md:pt-4">
             <GroceryList />
           </TabsContent>
           
-          <TabsContent value="tutorials" className="pt-1 md:pt-2">
+          <TabsContent value="tutorials" className="pt-3 md:pt-4">
             <CookingTutorials />
           </TabsContent>
         </Tabs>
