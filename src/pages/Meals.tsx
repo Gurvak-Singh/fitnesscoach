@@ -20,20 +20,22 @@ const Meals = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-8">Meal Planning</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-12 md:mb-14`}>
-            <TabsTrigger value="generator" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'AI Generator' : 'AI Recipe Generator'}
-            </TabsTrigger>
-            <TabsTrigger value="planner" className={tabTriggerClass}>
-              Meal Planner
-            </TabsTrigger>
-            <TabsTrigger value="grocery" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'Grocery' : 'Grocery Lists'}
-            </TabsTrigger>
-            <TabsTrigger value="tutorials" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'Tutorials' : 'Cooking Tutorials'}
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex justify-center mb-12 md:mb-14">
+            <TabsList className={`${tabsListClass}`}>
+              <TabsTrigger value="generator" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'AI Generator' : 'AI Recipe Generator'}
+              </TabsTrigger>
+              <TabsTrigger value="planner" className={tabTriggerClass}>
+                Meal Planner
+              </TabsTrigger>
+              <TabsTrigger value="grocery" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'Grocery' : 'Grocery Lists'}
+              </TabsTrigger>
+              <TabsTrigger value="tutorials" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'Tutorials' : 'Cooking Tutorials'}
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           <TabsContent value="generator" className="pt-6 md:pt-8">
             <AiMealGenerator />

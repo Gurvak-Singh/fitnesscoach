@@ -56,9 +56,9 @@ export function useTabLayoutClasses() {
   return {
     tabsListClass: isMobile 
       ? 'flex flex-wrap gap-2 w-full bg-transparent p-1.5 rounded-xl' 
-      : 'inline-flex justify-between w-full bg-secondary/50 p-4 rounded-xl',
+      : 'inline-flex w-full bg-gray-100 dark:bg-slate-800/20 p-2 rounded-full',
     tabTriggerClass: isMobile 
       ? 'w-[calc(50%-4px)] h-10 rounded-lg transition-all data-[state=active]:bg-secondary/50 dark:data-[state=active]:bg-slate-800 data-[state=active]:shadow-sm font-medium text-sm' 
-      : 'flex-1 px-6 py-2.5 h-12 rounded-lg transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-800 data-[state=active]:shadow-sm font-medium text-base'
+      : 'flex-1 px-6 py-3 rounded-full transition-all data-[state=active]:bg-primary data-[state=active]:text-white dark:data-[state=active]:bg-primary dark:data-[state=active]:text-white data-[state=inactive]:text-muted-foreground font-medium text-base'
   }
 }

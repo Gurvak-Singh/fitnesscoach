@@ -20,20 +20,22 @@ const Fitness = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-8">Fitness Module</h1>
         
         <Tabs defaultValue="generator" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`${tabsListClass} mb-12 md:mb-14`}>
-            <TabsTrigger value="generator" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'Generator' : 'Workout Generator'}
-            </TabsTrigger>
-            <TabsTrigger value="tracker" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'Tracker' : 'Workout Tracker'}
-            </TabsTrigger>
-            <TabsTrigger value="history" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'History' : 'Progress History'}
-            </TabsTrigger>
-            <TabsTrigger value="library" className={tabTriggerClass}>
-              {tabTriggerClass.includes('w-[calc') ? 'Exercises' : 'Exercise Library'}
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex justify-center mb-12 md:mb-14">
+            <TabsList className={tabsListClass}>
+              <TabsTrigger value="generator" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'Generator' : 'Workout Generator'}
+              </TabsTrigger>
+              <TabsTrigger value="tracker" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'Tracker' : 'Workout Tracker'}
+              </TabsTrigger>
+              <TabsTrigger value="history" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'History' : 'Progress History'}
+              </TabsTrigger>
+              <TabsTrigger value="library" className={tabTriggerClass}>
+                {tabTriggerClass.includes('w-[calc') ? 'Exercises' : 'Exercise Library'}
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           <TabsContent value="generator" className="pt-6 md:pt-8">
             <WorkoutGenerator />
