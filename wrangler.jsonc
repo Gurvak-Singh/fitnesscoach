@@ -3,5 +3,21 @@
   "compatibility_date": "2025-04-27",
   "assets": {
     "directory": "./dist"
+  },
+  "routes": [
+    {
+      "pattern": "*",
+      "script": null,
+      "handle_errors": true
+    }
+  ],
+  "site": {
+    "bucket": "./dist",
+    "include": ["*"],
+    "exclude": [],
+    "entry_directory": "./dist"
+  },
+  "build": {
+    "command": "npm run build"
   }
 }
