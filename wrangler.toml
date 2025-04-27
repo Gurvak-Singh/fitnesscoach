@@ -1,6 +1,15 @@
 name = "fitlife"
 compatibility_date = "2025-04-27"
-main = "_worker.js"
 
 [site]
-bucket = "./dist"
+bucket = "dist"
+
+[build]
+command = "npm run build"
+upload.format = "directory"
+
+[env.production]
+name = "fitlife"
+
+[site.production]
+bucket = "dist"
