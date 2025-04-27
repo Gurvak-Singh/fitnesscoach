@@ -1,7 +1,9 @@
 {
   "name": "fitlife",
   "compatibility_date": "2025-04-27",
+  "workers_dev": true,
   "site": {
     "bucket": "./dist"
-  }
+  },
+  "main": "./workers-site/index.js"
 }
