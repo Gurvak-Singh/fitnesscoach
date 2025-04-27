@@ -1,4 +1,7 @@
 {
   "name": "fitlife",
-  "compatibility_date": "2025-04-27"
+  "compatibility_date": "2025-04-27",
+  "site": {
+    "bucket": "./dist"
+  }
 }
