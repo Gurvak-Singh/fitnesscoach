@@ -1,24 +1,24 @@
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
     // Check if the request is for a static asset
     if (url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
-      return fetch(request);
+      // Just return the asset from the static site
+      return env.ASSETS.fetch(request);
     }
     
     try {
-      // Try to get the requested URL directly
-      const response = await fetch(request);
+      // Try to serve the requested path
+      const response = await env.ASSETS.fetch(request);
       if (response.status < 400) {
         return response;
       }
     } catch (e) {
-      // Fall through to returning the index.html
+      // Fall through to SPA handling
     }
     
-    // If we get here, return the index.html for SPA routing
-    const indexUrl = new URL('/', url);
-    return fetch(new Request(indexUrl, request));
+    // If we're here, we need to serve the index.html for client-side routing
+    return env.ASSETS.fetch(`${url.origin}/index.html`);
   }
 }

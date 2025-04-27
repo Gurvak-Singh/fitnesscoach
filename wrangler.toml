@@ -1,3 +1,6 @@
-name= "fitlife"
-compatibility_date="2025-04-27"
-assets = { directory = "build"}
+name = "fitlife"
+compatibility_date = "2025-04-27"
+main = "_worker.js"
+
+[site]
+bucket = "./dist"
