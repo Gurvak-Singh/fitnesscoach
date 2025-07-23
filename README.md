@@ -1,69 +1,141 @@
-# Welcome to your Lovable project
+# Fitness Coach 💪
 
-## Project info
+A modern, responsive fitness coaching application built with React and TypeScript. This app helps users track their fitness journey, manage workouts, and achieve their health goals with an intuitive and beautiful interface.
 
-**URL**: https://lovable.dev/projects/f168ab40-5ecc-432c-9e39-d9829aab85ea
+## ✨ Features
 
-## How can I edit this code?
+- **Workout Tracking**: Log and monitor your daily workouts
+- **Progress Analytics**: Visualize your fitness progress over time
+- **Personalized Plans**: Get customized workout routines
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Modern UI**: Built with shadcn-ui components for a clean, professional look
 
-There are several ways of editing your application.
+## 🚀 Tech Stack
 
-**Use Lovable**
+- **Frontend Framework**: [React](https://reactjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [shadcn-ui](https://ui.shadcn.com/)
+- **Development Platform**: [Lovable.dev](https://lovable.dev/)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f168ab40-5ecc-432c-9e39-d9829aab85ea) and start prompting.
+## 📋 Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (version 16 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-**Use your preferred IDE**
+We recommend using [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage Node.js versions.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Installation & Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Option 1: Local Development
 
-Follow these steps:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Gurvak-Singh/fitnesscoach.git
+   cd fitnesscoach
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. **Open your browser**
+   Navigate to `http://localhost:5173` to view the application.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Option 2: Use Lovable.dev
 
-**Edit a file directly in GitHub**
+Simply visit the [Lovable Project](https://lovable.dev/projects/f168ab40-5ecc-432c-9e39-d9829aab85ea) and start editing directly in the browser. Changes made via Lovable will be automatically committed to this repository.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Option 3: GitHub Codespaces
 
-**Use GitHub Codespaces**
+1. Navigate to the main page of this repository
+2. Click the "Code" button (green button)
+3. Select the "Codespaces" tab
+4. Click "New codespace" to launch the development environment
+5. Edit files directly within Codespace
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📦 Available Scripts
 
-## What technologies are used for this project?
+- `npm run dev` - Start the development server
+- `npm run build` - Build the project for production
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint for code quality checks
 
-This project is built with .
+## 🚀 Deployment
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Deploy with Lovable.dev
 
-## How can I deploy this project?
+1. Open your [Lovable project](https://lovable.dev/projects/f168ab40-5ecc-432c-9e39-d9829aab85ea)
+2. Click on **Share** → **Publish**
+3. Your app will be deployed automatically
 
-Simply open [Lovable](https://lovable.dev/projects/f168ab40-5ecc-432c-9e39-d9829aab85ea) and click on Share -> Publish.
+### Deploy with Netlify (Custom Domain)
 
-## I want to use a custom domain - is that possible?
+For custom domain deployment, we recommend using Netlify:
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+1. Build the project: `npm run build`
+2. Deploy the `dist` folder to Netlify
+3. Configure your custom domain in Netlify settings
+
+For detailed instructions, visit: [Custom domains guide](https://docs.lovable.dev/tips-tricks/custom-domain/)
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Make your changes**
+4. **Commit your changes**
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+5. **Push to the branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+6. **Open a Pull Request**
+
+## 📝 Development Workflow
+
+- **Lovable.dev**: Changes made in Lovable are automatically committed to this repo
+- **Local development**: Push changes to this repo, and they'll be reflected in Lovable
+- **GitHub**: Edit files directly in GitHub using the pencil icon
+
+## 🐛 Issues & Support
+
+If you encounter any issues or have questions:
+
+1. Check existing [Issues](https://github.com/Gurvak-Singh/fitnesscoach/issues)
+2. Create a new issue if your problem isn't already reported
+3. Provide detailed information about the bug or feature request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Gurvak Singh**
+- GitHub: [@Gurvak-Singh](https://github.com/Gurvak-Singh)
+
+## 🙏 Acknowledgments
+
+- Built with [Lovable.dev](https://lovable.dev/) platform
+- UI components from [shadcn-ui](https://ui.shadcn.com/)
+- Styling with [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+**Ready to start your fitness journey? Let's get moving! 🏃‍♂️💪**
